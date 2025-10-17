@@ -1,0 +1,12 @@
+{
+  "name": "log-system",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "log-generator",
+    "log-analyzer",
+    "shared"
+  ],
+  "author": "Dzmitry Tsublianok",
+  "repository": {"url": "https://github.com/pr0gresss/NodeJs-Practice"}
+}
