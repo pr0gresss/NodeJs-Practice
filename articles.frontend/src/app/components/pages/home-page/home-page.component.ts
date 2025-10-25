@@ -5,8 +5,8 @@ import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-home-page',
   standalone: true,
+  selector: 'app-home-page',
   imports: [DatePipe],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
@@ -31,7 +31,5 @@ export class HomePageComponent implements OnInit {
     });
   }
 
-  public handleFormSubmit() {
-    
-  }
+  public handleFormSubmit() {}
 }
