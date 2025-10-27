@@ -25,7 +25,7 @@ class ArticleService {
 	}
 
 	static create({ title, content }) {
-		if (!title || !content) {
+		if (!title.trim() || !content.trim()) {
 			throw new Error('Title and content are required');
 		}
 

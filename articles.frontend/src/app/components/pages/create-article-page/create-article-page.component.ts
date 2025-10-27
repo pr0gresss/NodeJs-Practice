@@ -36,10 +36,9 @@ export class CreateArticlePageComponent {
 
     this._articleService.postArticle(newArticle).subscribe({
       next: (res) => {
-        console.log('Article saved!', res);
         this._router.navigate(["article", res.id!])
       },
-      error: (err) => console.error('Error saving article', err),
+      error: (err) => alert(err.error.error),
     });
   }
 }
