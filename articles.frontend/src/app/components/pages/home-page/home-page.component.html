@@ -1,5 +1,4 @@
 <div class="container">
-  <button (click)="goToCreatePage()">Create new Article</button>
   @for(article of articles(); track article.id) {
   <app-article-card [article]="article"></app-article-card>
   }

@@ -40,8 +40,4 @@ export class HomePageComponent implements OnInit {
       },
     });
   }
-
-  public goToCreatePage() {
-    this._router.navigate(["create"])
-  }
 }
