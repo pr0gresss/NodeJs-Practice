@@ -1,0 +1,7 @@
+<div class="container">
+  <form class="form" [formGroup]="articleForm" (ngSubmit)="handleFormSubmit()">
+    <input placeholder="title" formControlName="title"/>
+    <quill-editor formControlName="content" theme="snow"></quill-editor>
+    <button type="ngSubmit">Post new article</button>
+  </form>
+</div>

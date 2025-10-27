@@ -13,7 +13,7 @@ export class ArticleService {
     return this._baseService.get('articles');
   }
 
-  public getArticleById(articleId: number): Observable<IArticle> {
+  public getArticleById(articleId: string): Observable<IArticle> {
     return this._baseService.get(`articles/${articleId}`);
   }
 

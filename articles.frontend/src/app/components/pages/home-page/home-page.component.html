@@ -1,9 +1,6 @@
-@for(article of articles(); track article.id) {
-  <div>{{article.id}}</div>
-  <div>{{article.title}}</div>
-  <div>{{article.content}}</div>
-  <div>{{article.createdAt | date:'medium'}}</div>
-}
-
-
-<form (ngSubmit)="handleFormSubmit()"></form>
+<div class="container">
+  <button (click)="goToCreatePage()">Create new Article</button>
+  @for(article of articles(); track article.id) {
+  <app-article-card [article]="article"></app-article-card>
+  }
+</div>

@@ -1,0 +1,12 @@
+<div class="container">
+  @if(articleForm.controls.title.value && articleForm.controls.content.value) {
+  <h2>{{ articleForm.controls.title.value }}</h2>
+  <quill-editor
+    [readOnly]="true"
+    [formControl]="articleForm.controls.content"
+    theme="snow"
+  ></quill-editor>
+  } @else {
+  <h1>Can't find this article</h1>
+  }
+</div>

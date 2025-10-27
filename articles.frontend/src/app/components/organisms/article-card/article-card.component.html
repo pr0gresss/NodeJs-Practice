@@ -1,0 +1,4 @@
+<div class="card" (click)="goToArticle()">
+  <div class="card__title">{{this.article()?.title}}</div>
+  <div class="card__time">{{this.article()?.createdAt | date:"medium"}}</div>
+</div>

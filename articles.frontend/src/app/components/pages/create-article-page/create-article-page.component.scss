@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  max-width: 1200px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.form {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 20px;
+
+  quill-editor {
+    margin-bottom: 50px;
+  }
+}

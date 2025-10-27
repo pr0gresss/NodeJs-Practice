@@ -6,6 +6,17 @@ exports.handleRequest = async (req, res) => {
   // Adding CORS
   setCORSHeaders(res);
 
+	if (method === 'OPTIONS') {
+		res.writeHead(204, {
+			'Access-Control-Allow-Origin': 'http://localhost:4200',
+			'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type',
+			'Access-Control-Max-Age': 86400, // cache preflight
+		});
+		res.end();
+		return;
+	}
+
 	// Parse URL
 	const [_, resource, id] = url.split('/');
 
@@ -42,7 +53,10 @@ exports.handleRequest = async (req, res) => {
 };
 
 function sendJSON(res, status, data) {
-	res.writeHead(status, { 'Content-Type': 'application/json' });
+	res.writeHead(status, {
+		'Content-Type': 'application/json',
+		'Access-Control-Allow-Origin': 'http://localhost:4200',
+	});
 	res.end(JSON.stringify(data));
 }
 

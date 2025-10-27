@@ -1,0 +1,17 @@
+.card {
+  cursor: pointer;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 5px;
+  gap: 10px;
+  border-radius: 10px;
+  border: solid 1px;
+
+  &__title {
+    font-size: 25px;
+  }
+
+  &__content {
+    font-size: 18px;
+  }
+}
