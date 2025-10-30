@@ -1,0 +1,5 @@
+<div class="container">
+  @for(article of articles(); track article.id) {
+  <app-article-card [article]="article"></app-article-card>
+  }
+</div>
