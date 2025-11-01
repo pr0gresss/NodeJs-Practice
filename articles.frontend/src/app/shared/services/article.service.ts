@@ -20,4 +20,12 @@ export class ArticleService {
   public postArticle(article: IArticle): Observable<IArticle> {
     return this._baseService.post('articles', article);
   }
+
+  public updateArticle(article: IArticle) {
+    return this._baseService.put("articles", article)
+  }
+
+  public deleteArticle(id: string) {
+    return this._baseService.delete(`articles/${id}`)
+  }
 }

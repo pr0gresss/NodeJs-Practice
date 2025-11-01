@@ -3,4 +3,5 @@ export interface IArticle {
   content: string;
   id?: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
