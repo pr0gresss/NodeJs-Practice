@@ -112,7 +112,7 @@ exports.create = (req, res) => {
  */
 exports.update = (req, res) => {
 	try {
-		const updated = ArticleService.update(req.body); // ✅ pass full article
+		const updated = ArticleService.update(req.body);
 
 		if (!updated) {
 			return res.status(404).json({ error: 'Article not found' });
@@ -144,7 +144,7 @@ exports.update = (req, res) => {
  */
 exports.delete = (req, res) => {
   try {
-    const { id } = req.params; // ✅ get ID from route
+    const { id } = req.params;
 
     const deleted = ArticleService.delete(id);
 
