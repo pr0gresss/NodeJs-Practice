@@ -38,6 +38,36 @@ class ArticleService {
 		);
 		return article;
 	}
+
+	static update(article) {
+		const { id, title, content } = article;
+		const filePath = path.join(DATA_DIR, `${id}.json`);
+
+		if (!fs.existsSync(filePath)) return null;
+
+		const existing = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+		const updated = {
+			...existing,
+			title: title?.trim() || existing.title,
+			content: content?.trim() || existing.content,
+			updatedAt: new Date().toISOString(),
+		};
+
+		fs.writeFileSync(filePath, JSON.stringify(updated, null, 2));
+		return updated;
+	}
+
+	static delete(id) {
+		const filePath = path.join(DATA_DIR, `${id}.json`);
+
+		if (!fs.existsSync(filePath)) {
+			return false;
+		}
+
+		fs.unlinkSync(filePath);
+		return true;
+	}
 }
 
 module.exports = ArticleService;
