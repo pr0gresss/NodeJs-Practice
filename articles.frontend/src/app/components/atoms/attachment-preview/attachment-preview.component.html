@@ -1,0 +1,5 @@
+@if (attachment()) {
+<a class="attachment" [href]="attachment()!.url" target="_blank">
+	<img class="attachment__image" [src]="attachment()!.url" [alt]="attachment()!.filename" />
+</a>
+}
