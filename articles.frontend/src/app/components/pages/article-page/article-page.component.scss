@@ -28,4 +28,10 @@
       bottom: 0;
     }
   }
+
+  &__attachments {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
 }

@@ -1,7 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const DATA_DIR = path.join(__dirname, '../../data');
+const DATA_DIR = path.join(__dirname, "../../data");
+const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
 if (!fs.existsSync(DATA_DIR)) {
 	fs.mkdirSync(DATA_DIR);
@@ -9,9 +10,9 @@ if (!fs.existsSync(DATA_DIR)) {
 
 class ArticleService {
 	static getAll() {
-		const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith('.json'));
+		const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith(".json"));
 		return files.map(f => {
-			const data = fs.readFileSync(path.join(DATA_DIR, f), 'utf8');
+			const data = fs.readFileSync(path.join(DATA_DIR, f), "utf8");
 			return JSON.parse(data);
 		});
 	}
@@ -20,17 +21,23 @@ class ArticleService {
 		const filePath = path.join(DATA_DIR, `${id}.json`);
 		if (!fs.existsSync(filePath)) return null;
 
-		const data = fs.readFileSync(filePath, 'utf8');
+		const data = fs.readFileSync(filePath, "utf8");
 		return JSON.parse(data);
 	}
 
-	static create({ title, content }) {
-		if (!title.trim() || !content.trim()) {
-			throw new Error('Title and content are required');
+	static create({title, content, attachments = []}) {
+		if (!title?.trim() || !content?.trim()) {
+			throw new Error("Title and content are required");
 		}
 
 		const id = Date.now().toString();
-		const article = { id, title, content, createdAt: new Date().toISOString() };
+		const article = {
+			id,
+			title,
+			content,
+			attachments,
+			createdAt: new Date().toISOString(),
+		};
 
 		fs.writeFileSync(
 			path.join(DATA_DIR, `${id}.json`),
@@ -39,18 +46,17 @@ class ArticleService {
 		return article;
 	}
 
-	static update(article) {
-		const { id, title, content } = article;
+	static update({id, title, content, attachments = []}) {
 		const filePath = path.join(DATA_DIR, `${id}.json`);
-
 		if (!fs.existsSync(filePath)) return null;
 
-		const existing = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+		const existing = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
 		const updated = {
 			...existing,
 			title: title?.trim() || existing.title,
 			content: content?.trim() || existing.content,
+			attachments: attachments.length ? attachments : existing.attachments,
 			updatedAt: new Date().toISOString(),
 		};
 
@@ -67,6 +73,21 @@ class ArticleService {
 
 		fs.unlinkSync(filePath);
 		return true;
+	}
+
+	static uploadAttachment(file) {
+		console.log(file)
+		if (!file) {
+			throw new Error("No file uploaded");
+		}
+
+		return {
+			filename: file.filename,
+			url: `${BASE_URL}/uploads/${file.filename}`,
+			mimetype: file.mimetype,
+			size: file.size,
+			uploadedAt: new Date().toISOString(),
+		};
 	}
 }
 

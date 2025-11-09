@@ -1,33 +1,49 @@
 <div class="container">
-  <div class="container__header">
-    @if(currentMode == MODE.EDIT) {
-    <input
-      class="container__header__title"
-      type="text"
-      [formControl]="articleForm.controls.title"
-    />
-    } @if(currentMode == MODE.PREVIEW) {
-    <h1 class="container__header__title">
-      {{ articleForm.controls.title.value }}
-    </h1>
-    }
+	<div class="container__header">
+		@if(currentMode == MODE.EDIT) {
+		<input
+			class="container__header__title"
+			type="text"
+			[formControl]="articleForm.controls.title"
+		/>
+		} @if(currentMode == MODE.PREVIEW) {
+		<h1 class="container__header__title">
+			{{ articleForm.controls.title.value }}
+		</h1>
+		}
 
-    <div class="container__header__actions">
-      @if(currentMode == MODE.EDIT) {
-      <button (click)="saveArticle()">Save Changes</button>
-      <button (click)="deleteArticle()">Delete article</button>
-      }
-      <button (click)="toggleMode()">Switch mode</button>
-    </div>
-  </div>
-  <div class="container__content">
-    @if (currentMode == MODE.EDIT) {
-    <quill-editor
-      [formControl]="articleForm.controls.content"
-      theme="snow"
-    ></quill-editor>
-    } @if(currentMode == MODE.PREVIEW) {
-    <div class="container__content__inner" [innerHTML]="safeHtml"></div>
-    }
-  </div>
+		<div class="container__header__actions">
+			@if(currentMode == MODE.EDIT) {
+			<button (click)="saveArticle()" [disabled]="articleForm.untouched">
+				Save Changes
+			</button>
+			<button (click)="deleteArticle()">Delete article</button>
+			}
+			<button (click)="toggleMode()">Switch mode</button>
+		</div>
+	</div>
+	<div class="container__attachments">
+		<h2>Attachments:</h2>
+		<app-attachments-block
+			[attachments]="articleForm.controls.attachments.value!"
+		/>
+
+		@if(currentMode == MODE.EDIT) {
+		<input
+			type="file"
+			(change)="handleFileSelection($event)"
+			accept=".jpg,.jpeg,.png,.gif,.pdf"
+		/>
+		}
+	</div>
+	<div class="container__content">
+		@if (currentMode == MODE.EDIT) {
+		<quill-editor
+			[formControl]="articleForm.controls.content"
+			theme="snow"
+		></quill-editor>
+		} @if(currentMode == MODE.PREVIEW) {
+		<div class="container__content__inner" [innerHTML]="safeHtml"></div>
+		}
+	</div>
 </div>

@@ -1,0 +1,9 @@
+@if (attachments()!.length > 0) {
+<div class="attachments">
+	@for (attachment of attachments(); track attachment.filename) {
+	<app-attachment-preview [attachment]="attachment" />
+	}
+</div>
+} @else {
+<div class="empty">No files attached.</div>
+}

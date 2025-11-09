@@ -1,13 +1,15 @@
-const ArticleService = require('../services/articleService');
+const ArticleService = require("../services/articleService");
+const {getIO} = require("../sockets/socket");
 
 /**
  * @swagger
  * /articles:
  *   get:
  *     summary: Get all articles
+ *     tags: [Articles]
  *     responses:
  *       200:
- *         description: A list of articles
+ *         description: A list of all articles
  *         content:
  *           application/json:
  *             schema:
@@ -19,6 +21,19 @@ const ArticleService = require('../services/articleService');
  *                     type: string
  *                   title:
  *                     type: string
+ *                   content:
+ *                     type: string
+ *                   attachments:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         filename:
+ *                           type: string
+ *                         url:
+ *                           type: string
+ *                         uploadedAt:
+ *                           type: string
  */
 exports.getAll = (req, res) => {
 	const articles = ArticleService.getAll();
@@ -29,22 +44,24 @@ exports.getAll = (req, res) => {
  * @swagger
  * /articles/{id}:
  *   get:
- *     summary: Get article by ID
+ *     summary: Get an article by ID
+ *     tags: [Articles]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
+ *         description: The article ID
  *     responses:
  *       200:
- *         description: The article
+ *         description: Article found
  *       404:
  *         description: Article not found
  */
 exports.getById = (req, res) => {
 	const article = ArticleService.getById(req.params.id);
-	if (!article) return res.status(404).json({ error: 'Article not found' });
+	if (!article) return res.status(404).json({error: "Article not found"});
 	res.status(200).json(article);
 };
 
@@ -53,29 +70,51 @@ exports.getById = (req, res) => {
  * /articles:
  *   post:
  *     summary: Create a new article
+ *     tags: [Articles]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - title
+ *               - content
  *             properties:
  *               title:
  *                 type: string
+ *                 example: "My first article"
  *               content:
  *                 type: string
+ *                 example: "<p>This is HTML content</p>"
+ *               attachments:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     filename:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Article created
+ *         description: Article created successfully
  *       400:
- *         description: Invalid input
+ *         description: Invalid request
  */
 exports.create = (req, res) => {
 	try {
-		const article = ArticleService.create(req.body);
+		const {title, content, attachments = []} = req.body;
+
+		const article = ArticleService.create({
+			title,
+			content,
+			attachments,
+		});
+
 		res.status(201).json(article);
 	} catch (err) {
-		res.status(400).json({ error: err.message });
+		res.status(400).json({error: err.message});
 	}
 };
 
@@ -84,24 +123,35 @@ exports.create = (req, res) => {
  * /articles:
  *   put:
  *     summary: Update an existing article
- *     description: Updates an article using its ID from the request body.
+ *     tags: [Articles]
+ *     description: Update article details and attachments.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required: [id]
+ *             required:
+ *               - id
  *             properties:
  *               id:
  *                 type: string
- *                 example: "1729963452001"
+ *                 example: "1730505050000"
  *               title:
  *                 type: string
- *                 example: "Updated title"
+ *                 example: "Updated Title"
  *               content:
  *                 type: string
- *                 example: "<p>Updated content</p>"
+ *                 example: "<p>Updated HTML content</p>"
+ *               attachments:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     filename:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       200:
  *         description: Article updated successfully
@@ -112,15 +162,27 @@ exports.create = (req, res) => {
  */
 exports.update = (req, res) => {
 	try {
-		const updated = ArticleService.update(req.body);
+		const {id, title, content, attachments = [], socketId} = req.body;
 
-		if (!updated) {
-			return res.status(404).json({ error: 'Article not found' });
-		}
+		const updated = ArticleService.update({
+			id,
+			title,
+			content,
+			attachments,
+		});
+
+		if (!updated) return res.status(404).json({error: "Article not found"});
+
+		const io = getIO();
+		io.to(updated.id).except(socketId).emit("articleUpdated", {
+			id: updated.id,
+			title: updated.title,
+			updatedAt: updated.updatedAt,
+		});
 
 		res.status(200).json(updated);
 	} catch (err) {
-		res.status(400).json({ error: err.message });
+		res.status(400).json({error: err.message});
 	}
 };
 
@@ -128,14 +190,15 @@ exports.update = (req, res) => {
  * @swagger
  * /articles/{id}:
  *   delete:
- *     summary: Delete an article by ID
+ *     summary: Delete an article
+ *     tags: [Articles]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *           example: "1730293939"
+ *         description: ID of the article to delete
  *     responses:
  *       200:
  *         description: Article deleted successfully
@@ -143,17 +206,62 @@ exports.update = (req, res) => {
  *         description: Article not found
  */
 exports.delete = (req, res) => {
-  try {
-    const { id } = req.params;
+	try {
+		const {id} = req.params;
 
-    const deleted = ArticleService.delete(id);
+		const deleted = ArticleService.delete(id);
 
-    if (!deleted) {
-      return res.status(404).json({ error: 'Article not found' });
-    }
+		if (!deleted) return res.status(404).json({error: "Article not found"});
 
-    res.status(200).json({ message: 'Article deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+		res.status(200).json({message: "Article deleted successfully"});
+	} catch (err) {
+		res.status(500).json({error: err.message});
+	}
+};
+
+/**
+ * @swagger
+ * /articles/attachments:
+ *   post:
+ *     summary: Upload an attachment file
+ *     tags: [Articles]
+ *     description: Uploads a single file and returns attachment metadata.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: File uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 filename:
+ *                   type: string
+ *                 url:
+ *                   type: string
+ *                 mimetype:
+ *                   type: string
+ *                 size:
+ *                   type: number
+ *                 uploadedAt:
+ *                   type: string
+ *       400:
+ *         description: No file provided or invalid request
+ */
+exports.uploadAttachment = (req, res) => {
+	try {
+		const attachment = ArticleService.uploadAttachment(req.file);
+		res.status(200).json(attachment);
+	} catch (err) {
+		res.status(400).json({error: err.message});
+	}
 };

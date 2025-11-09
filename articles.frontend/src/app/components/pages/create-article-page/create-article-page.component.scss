@@ -3,6 +3,7 @@
   align-content: start;
   flex-flow: column;
   max-width: 1200px;
+  padding: 0 20px;
   justify-content: center;
   gap: 30px;
   margin: 0 auto;
@@ -16,4 +17,10 @@
   quill-editor {
     margin-bottom: 20px;
   }
+
+  &__attachments {
+    display: flex;
+    gap: 20px;
+  }
 }
+

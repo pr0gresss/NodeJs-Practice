@@ -1,0 +1,9 @@
+.attachments {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px 20px;
+}
+
+.empty {
+  color: gray;
+}
