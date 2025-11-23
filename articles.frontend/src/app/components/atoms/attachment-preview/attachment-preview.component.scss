@@ -1,0 +1,14 @@
+.attachment {
+  &__image {
+      width: 60px;
+      border-radius: 5px;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      cursor: pointer;
+      position: relative;
+
+      &:hover {
+        filter: brightness(.7);
+      }
+    }
+}
