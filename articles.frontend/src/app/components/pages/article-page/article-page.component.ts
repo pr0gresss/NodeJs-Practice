@@ -1,4 +1,11 @@
-import {Component, inject, OnDestroy, OnInit, signal} from "@angular/core";
+import {
+	Component,
+	DestroyRef,
+	inject,
+	input,
+	OnDestroy,
+	OnInit,
+} from "@angular/core";
 import {QuillModule} from "ngx-quill";
 import {IArticle} from "../../../shared/entities/IArticle";
 import {ArticleService} from "../../../shared/services/article.service";
@@ -8,7 +15,7 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {IAttachment} from "../../../shared/entities/IAttachment";
 import {AttachmentsBlockComponent} from "../../molecules/attachments-block/attachments-block.component";
 import {SocketService} from "../../../shared/services/ws.service";
-import {Subscription} from "rxjs";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 enum EArticleMode {
 	PREVIEW,
@@ -26,13 +33,13 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	private _articleService = inject(ArticleService);
 	private _socketService = inject(SocketService);
 	private sanitizer = inject(DomSanitizer);
-	private _route = inject(ActivatedRoute);
-	private articleId = signal<string | null>(null);
-	private subs: Subscription[] = [];
+	private destroyRef = inject(DestroyRef);
+
+	public articleId = input.required<string>();
 
 	protected readonly MODE = EArticleMode;
 	protected articleForm = new FormGroup({
-		id: new FormControl<string | null>(this.articleId()),
+		id: new FormControl<string | null>(null),
 		title: new FormControl<string>(""),
 		content: new FormControl<string>(""),
 		attachments: new FormControl<IAttachment[]>([]),
@@ -41,27 +48,32 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	public currentMode = EArticleMode.PREVIEW;
 
 	public ngOnInit(): void {
-		this.articleId.set(this._route.snapshot.paramMap.get("id"));
+		this.articleForm.controls.id.setValue(this.articleId());
 
 		if (this.articleId()) {
-			this._socketService.joinArticleRoom(this.articleId()!);
+			this._socketService.joinRoom(this.articleId()!);
 
 			this._socketService
 				.listen<IArticle>("articleUpdated")
+				.pipe(takeUntilDestroyed(this.destroyRef))
 				.subscribe(update => {
 					console.log("🔄 Article updated via socket:", update);
 					alert("This article was updated!");
 				});
-			this._articleService.getArticleById(this.articleId()!).subscribe({
-				next: data => {
-					this.articleForm.patchValue(data);
-				},
-			});
+			this._articleService
+				.getArticleById(this.articleId()!)
+				.pipe(takeUntilDestroyed(this.destroyRef))
+				.subscribe({
+					next: data => {
+						this.articleForm.patchValue(data);
+					},
+				});
 		}
 	}
 
 	public ngOnDestroy() {
-		this.subs.forEach(s => s.unsubscribe());
+		this._socketService.leaveRoom(this.articleId()!);
+		this._socketService.disconnect();
 	}
 
 	get safeHtml(): SafeHtml {

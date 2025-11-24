@@ -25,11 +25,11 @@ export class ArticleService {
 	}
 
 	public updateArticle(article: IArticle) {
-		const socketId = this._socketService.socket.id;
+		const authorId = this._socketService.socket.id;
 
 		const payload = {
 			...article,
-			socketId,
+			authorId,
 		};
 		return this._baseService.put("articles", payload);
 	}

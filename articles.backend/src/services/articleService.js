@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
+const { PORT, BASE_URL } = require("../config/environment");
 
 const DATA_DIR = path.join(__dirname, "../../data");
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
 if (!fs.existsSync(DATA_DIR)) {
 	fs.mkdirSync(DATA_DIR);
@@ -83,7 +83,7 @@ class ArticleService {
 
 		return {
 			filename: file.filename,
-			url: `${BASE_URL}/uploads/${file.filename}`,
+			url: `${BASE_URL}:${PORT}/uploads/${file.filename}`,
 			mimetype: file.mimetype,
 			size: file.size,
 			uploadedAt: new Date().toISOString(),

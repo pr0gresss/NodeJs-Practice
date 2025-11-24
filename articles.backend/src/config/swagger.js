@@ -1,4 +1,5 @@
 const swaggerJSDoc = require('swagger-jsdoc');
+const {BASE_URL} = require("./environment");
 
 const options = {
 	definition: {
@@ -10,7 +11,7 @@ const options = {
 		},
 		servers: [
 			{
-				url: 'http://localhost:3000',
+				url: BASE_URL,
 			},
 		],
 	},

@@ -1,5 +1,5 @@
 const ArticleService = require("../services/articleService");
-const {getIO} = require("../sockets/socket");
+const SocketService = require("../services/socketService");
 
 /**
  * @swagger
@@ -162,7 +162,7 @@ exports.create = (req, res) => {
  */
 exports.update = (req, res) => {
 	try {
-		const {id, title, content, attachments = [], socketId} = req.body;
+		const {id, title, content, attachments = [], authorId} = req.body;
 
 		const updated = ArticleService.update({
 			id,
@@ -173,12 +173,16 @@ exports.update = (req, res) => {
 
 		if (!updated) return res.status(404).json({error: "Article not found"});
 
-		const io = getIO();
-		io.to(updated.id).except(socketId).emit("articleUpdated", {
-			id: updated.id,
-			title: updated.title,
-			updatedAt: updated.updatedAt,
-		});
+		SocketService.broadcastToRoomExceptAuthor(
+			updated.id,
+			"articleUpdated",
+			{
+				id: updated.id,
+				title: updated.title,
+				updatedAt: updated.updatedAt,
+			},
+			authorId
+		);
 
 		res.status(200).json(updated);
 	} catch (err) {
