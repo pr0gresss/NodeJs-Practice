@@ -53,7 +53,6 @@ class SocketService extends EventEmitter {
 	}
 
 	broadcastToRoomExceptAuthor(room, event, payload, authorId) {
-    console.log(authorId)
     this.getIO().to(room).except(authorId).emit(event, payload);
   }
 

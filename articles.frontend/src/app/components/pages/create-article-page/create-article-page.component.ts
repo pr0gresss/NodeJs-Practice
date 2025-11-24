@@ -53,7 +53,6 @@ export class CreateArticlePageComponent {
 					attachment,
 				]);
 				input.value = "";
-				console.log(this.articleForm.controls.attachments.value);
 			},
 			error: err => {
 				alert(err);

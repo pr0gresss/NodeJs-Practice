@@ -76,7 +76,6 @@ class ArticleService {
 	}
 
 	static uploadAttachment(file) {
-		console.log(file)
 		if (!file) {
 			throw new Error("No file uploaded");
 		}

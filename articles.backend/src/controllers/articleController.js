@@ -176,11 +176,7 @@ exports.update = (req, res) => {
 		SocketService.broadcastToRoomExceptAuthor(
 			updated.id,
 			"articleUpdated",
-			{
-				id: updated.id,
-				title: updated.title,
-				updatedAt: updated.updatedAt,
-			},
+			updated,
 			authorId
 		);
 

@@ -22,7 +22,6 @@ export class SocketService {
 	}
 
 	joinRoom(roomName: string) {
-		console.log(roomName)
 		this.emit("room:join", roomName);
 	} 
 

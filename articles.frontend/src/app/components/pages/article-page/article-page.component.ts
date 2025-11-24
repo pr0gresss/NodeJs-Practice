@@ -57,6 +57,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 				.listen<IArticle>("articleUpdated")
 				.pipe(takeUntilDestroyed(this._destroyRef))
 				.subscribe(update => {
+					this.articleForm.patchValue(update)
 					alert("This article was updated!");
 				});
 			this._articleService
@@ -81,7 +82,6 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	}
 
 	public toggleMode() {
-		console.log(this.articleForm.touched);
 		if (this.currentMode == EArticleMode.PREVIEW) {
 			this.currentMode = EArticleMode.EDIT;
 		} else {
@@ -121,7 +121,6 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 					attachment,
 				]);
 				input.value = "";
-				console.log(this.articleForm.controls.attachments.value);
 			},
 			error: err => {
 				alert(err);
