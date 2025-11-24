@@ -5,7 +5,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 const articleRoutes = require("./routes/articleRoutes");
 const morgan = require("morgan");
-const {PORT, SWAGGER_ENDPOINT, FRONTEND_URL} = require("./config/environment");
+const {SWAGGER_ENDPOINT, FRONTEND_URL} = require("./config/environment");
 
 const app = express();
 
@@ -22,4 +22,4 @@ app.use("/" + SWAGGER_ENDPOINT, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Routes
 app.use("/", articleRoutes);
 
-module.exports = {app, PORT, FRONTEND_URL, SWAGGER_ENDPOINT};
+module.exports = {app, FRONTEND_URL, SWAGGER_ENDPOINT};

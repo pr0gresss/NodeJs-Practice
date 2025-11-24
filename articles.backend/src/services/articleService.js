@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { PORT, BASE_URL } = require("../config/environment");
+const {BASE_URL} = require("../config/environment");
 
 const DATA_DIR = path.join(__dirname, "../../data");
 
@@ -83,7 +83,7 @@ class ArticleService {
 
 		return {
 			filename: file.filename,
-			url: `${BASE_URL}:${PORT}/uploads/${file.filename}`,
+			url: `${BASE_URL}/uploads/${file.filename}`,
 			mimetype: file.mimetype,
 			size: file.size,
 			uploadedAt: new Date().toISOString(),
