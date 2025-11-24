@@ -9,7 +9,7 @@ import {
 import {QuillModule} from "ngx-quill";
 import {IArticle} from "../../../shared/entities/IArticle";
 import {ArticleService} from "../../../shared/services/article.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {IAttachment} from "../../../shared/entities/IAttachment";
@@ -32,8 +32,8 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	private _router: Router = inject(Router);
 	private _articleService = inject(ArticleService);
 	private _socketService = inject(SocketService);
-	private sanitizer = inject(DomSanitizer);
-	private destroyRef = inject(DestroyRef);
+	private _sanitizer = inject(DomSanitizer);
+	private _destroyRef = inject(DestroyRef);
 
 	public articleId = input.required<string>();
 
@@ -55,14 +55,13 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 
 			this._socketService
 				.listen<IArticle>("articleUpdated")
-				.pipe(takeUntilDestroyed(this.destroyRef))
+				.pipe(takeUntilDestroyed(this._destroyRef))
 				.subscribe(update => {
-					console.log("🔄 Article updated via socket:", update);
 					alert("This article was updated!");
 				});
 			this._articleService
 				.getArticleById(this.articleId()!)
-				.pipe(takeUntilDestroyed(this.destroyRef))
+				.pipe(takeUntilDestroyed(this._destroyRef))
 				.subscribe({
 					next: data => {
 						this.articleForm.patchValue(data);
@@ -73,11 +72,10 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 
 	public ngOnDestroy() {
 		this._socketService.leaveRoom(this.articleId()!);
-		this._socketService.disconnect();
 	}
 
 	get safeHtml(): SafeHtml {
-		return this.sanitizer.bypassSecurityTrustHtml(
+		return this._sanitizer.bypassSecurityTrustHtml(
 			this.articleForm.controls.content.value || ""
 		);
 	}

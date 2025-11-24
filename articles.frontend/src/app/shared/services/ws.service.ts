@@ -22,11 +22,12 @@ export class SocketService {
 	}
 
 	joinRoom(roomName: string) {
-		this.socket.emit("room:join", roomName);
+		console.log(roomName)
+		this.emit("room:join", roomName);
 	} 
 
 	leaveRoom(roomName: string) {
-		this.socket.emit("room:leave", roomName);
+		this.emit("room:leave", roomName);
 	} 
 
 	listen<T>(event: string): Observable<T> {
