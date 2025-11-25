@@ -15,10 +15,31 @@ cd articles.backend
 npm install
 ```
 
+### 🔧 Run db migration
+```bash
+npm run db:migrate
+```
+
+### 🔧 .env file example
+```bash
+DB_HOST="DB_HOST"
+DB_PORT=DB_PORT
+DB_USER="DB_USER"
+DB_PASSWORD="DB_PASSWORD"
+DB_NAME="DB_NAME"
+DB_SSL="true"
+SWAGGER_ENDPOINT="docs"
+BASE_PORT=BASE_PORT
+BASE_HOST="BACKEND_HOST"
+FRONTEND_HOST="FRONTEND_HOST"
+FRONTEND_PORT=FRONTEND_PORT
+```
+
 ### ▶️ Run the Backend
 ```bash
 npm run start
 ```
+
 
 The backend will start on 3000 port.
 
