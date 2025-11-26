@@ -1,12 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ArticleService } from '../../../shared/services/article.service';
 import { IArticle } from '../../../shared/entities/IArticle';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
-  FormControl,
-  FormGroup,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { ArticleCardComponent } from '../../organisms/article-card/article-card.component';
@@ -20,7 +17,7 @@ import { Router } from '@angular/router';
     CommonModule,
     ReactiveFormsModule,
     ArticleCardComponent,
-  ],
+],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })

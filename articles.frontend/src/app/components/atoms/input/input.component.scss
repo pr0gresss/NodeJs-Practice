@@ -1,0 +1,86 @@
+:host {
+	width: 100%;
+}
+
+.app-input__wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	&__label {
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+	&__control {
+		position: relative;
+		display: flex;
+		align-items: center;
+
+		app-icon {
+			color: var(--colors-gray-700);
+		}
+
+		&__field {
+			flex: 1;
+			padding-right: 40px;
+			padding: 6px 12px;
+			border: none;
+			border-radius: 4px;
+			outline: 1px solid var(--colors-gray-600);
+			background-color: var(--colors-white);
+
+			&::placeholder {
+				color: var(--colors-gray-700);
+			}
+		}
+
+		&__icon {
+			position: absolute;
+			right: 8px;
+			display: flex;
+			align-items: center;
+
+			&.action {
+				cursor: pointer;
+			}
+		}
+	}
+}
+
+#input.error {
+	input {
+		outline-color: var(--danger-main);
+	}
+
+	app-icon {
+		color: var(--danger-main);
+	}
+}
+
+#input.success {
+	input {
+		outline-color: var(--success-main);
+	}
+
+	app-icon {
+		color: var(--success-main);
+	}
+}
+
+#input {
+  label {
+    color: var(--colors-gray-600);
+  }
+
+	input:disabled {
+    cursor: not-allowed;
+    background-color: var(--colors-gray-200);
+		outline-color: var(--colors-gray-500);
+    color: var(--colors-gray-700);
+	}
+
+	app-icon {
+		color: var(--success-main);
+	}
+}

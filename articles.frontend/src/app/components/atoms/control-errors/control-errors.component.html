@@ -1,0 +1,9 @@
+@let err = errors(); 
+@if(err["maxlength"]) {
+<app-error>Input can be max {{ err["maxlength"].requiredLength }} characters long.</app-error>
+} 
+@if(err["minlength"]) {
+<app-error>Input must be at least {{ err["minlength"].requiredLength }} characters long.</app-error>
+} @if(err["required"]) {
+<app-error>This field is required</app-error>
+}

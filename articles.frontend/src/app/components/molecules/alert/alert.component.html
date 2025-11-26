@@ -1,0 +1,20 @@
+<div class="alert" [attr.data-type]="alert().type">
+	<div class="alert__info">
+		@switch(alert().type) {
+			@case("error") {
+				<app-icon class="alert__icon" icon="x-circle"/>
+			}
+			@case("warn") {
+				<app-icon class="alert__icon" icon="cancel"/>
+			}
+			@case("success") {
+				<app-icon class="alert__icon" icon="check-circle"/>
+			}
+			@case("info") {
+				<app-icon class="alert__icon" icon="info"/>
+			}
+		}
+		<div class="alert__info__message">{{ alert().message }}</div>
+	</div>
+  <app-icon class="alert__close" icon="x" (click)="removeAlert()"/>
+</div>

@@ -1,0 +1,9 @@
+<input
+	style="display: none"
+	#input
+	type="file"
+	[accept]="accept()"
+	[disabled]="disabled()"
+/>
+<!-- TODO: Add upload icon -->
+<app-button icon="arrow-up" (click)="input.click()">Upload file</app-button>

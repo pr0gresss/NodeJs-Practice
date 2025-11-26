@@ -1,0 +1,245 @@
+button {
+	border: 0;
+	outline: none;
+
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	gap: 4px;
+	width: 100%;
+
+	border-radius: 4px;
+
+	transition: 0.2s ease-in-out;
+	transition-property: color, background, box-shadow;
+
+	font-weight: 500;
+	cursor: pointer;
+}
+
+:host[size="small"] button {
+	padding: 8px 16px;
+	font-size: 14px;
+	line-height: 20px;
+	height: 40px;
+}
+
+:host[size="medium"] button {
+	padding: 12px 22px;
+	font-size: 16px;
+	line-height: 22px;
+}
+
+:host[size="large"] button {
+	padding: 16px 30px;
+	font-size: 18px;
+	line-height: 26px;
+}
+
+// Primary
+:host[variant="primary"] {
+	button {
+		background: var(--primary-main);
+		color: var(--colors-white);
+
+    app-icon {
+      color: var(--colors-white);
+    }
+	}
+
+	button:hover {
+		background: var(--primary-hover);
+		color: var(--colors-white) !important;
+	}
+
+	button:focus:not(:focus-visible) {
+		box-shadow: none;
+	}
+
+	button:focus-visible {
+		box-shadow: 0 0 0 2px var(--primary-focus) inset;
+	}
+
+	button:focus {
+		background: var(--primary-main);
+		color: var(--colors-white);
+	}
+
+	button:active {
+		background: var(--primary-pressed);
+		color: var(--colors-white);
+	}
+
+	button:disabled {
+		background: var(--colors-gray-200);
+		color: var(--colors-gray-500);
+		cursor: not-allowed;
+	}
+}
+
+// Secondary
+:host[variant="secondary"] {
+	button {
+		background: var(--primary-secondary);
+		color: var(--primary-main);
+
+    app-icon {
+      color: var(--primary-main);
+    }
+	}
+
+	button:hover {
+		background: var(--primary-secondary);
+		color: var(--primary-hover);
+
+    app-icon {
+      color: var(--primary-hover);
+    }
+	}
+
+	button:focus:not(:focus-visible) {
+		box-shadow: none;
+	}
+
+	button:focus-visible {
+		box-shadow: 0 0 0 2px var(--primary-focus) inset;
+	}
+
+	button:focus {
+		background: var(--primary-secondary);
+		color: var(--primary-main);
+
+    app-icon {
+      color: var(--primary-main);
+    }
+	}
+
+	button:active {
+		background: var(--primary-secondary);
+		color: var(--primary-pressed);
+
+    app-icon {
+      color: var(--primary-pressed);
+    }
+	}
+
+	button:disabled {
+		background: var(--colors-gray-200);
+		color: var(--colors-gray-500);
+		cursor: not-allowed;
+
+    app-icon {
+      color: var(--colors-gray-500);
+    }
+	}
+}
+
+// Outline
+:host[variant="outline"] {
+	button {
+		background: var(--primary-secondary);
+		color: var(--primary-main);
+    box-shadow: 0 0 0 1px var(--primary-border) inset;
+
+    app-icon {
+      color: var(--primary-main);
+    }
+	}
+
+	button:hover {
+		background: var(--primary-secondary);
+		color: var(--primary-hover);
+    box-shadow: 0 0 0 1px var(--primary-hover) inset;
+
+    app-icon {
+      color: var(--primary-hover);
+    }
+	}
+
+	button:focus-visible {
+		box-shadow: 0 0 0 2px var(--primary-focus) inset;
+	}
+
+	button:focus {
+		background: var(--primary-secondary);
+		color: var(--primary-main);
+
+    app-icon {
+      color: var(--primary-main);
+    }
+	}
+
+	button:active {
+		background: var(--primary-secondary);
+		color: var(--primary-pressed);
+    box-shadow: 0 0 0 1px var(--primary-pressed) inset;
+
+    app-icon {
+      color: var(--primary-pressed);
+    }
+	}
+
+	button:disabled {
+		background: var(--colors-gray-200);
+		color: var(--colors-gray-500);
+    box-shadow: 0 0 0 1px var(--colors-gray-400) inset;
+		cursor: not-allowed;
+
+    app-icon {
+      color: var(--colors-gray-500);
+    }
+	}
+}
+
+// Text
+:host[variant="text"] {
+	button {
+    background-color: transparent;
+		color: var(--primary-main);
+
+    app-icon {
+      color: var(--primary-main);
+    }
+	}
+
+	button:hover {
+		color: var(--primary-hover);
+
+    app-icon {
+      color: var(--primary-hover);
+    }
+	}
+
+	button:focus:not(:focus-visible) {
+		box-shadow: none;
+	}
+
+	button:focus-visible {
+		box-shadow: 0 0 0 2px var(--primary-focus) inset;
+	}
+
+	button:focus {
+		color: var(--primary-main);
+
+    app-icon {
+      color: var(--primary-main);
+    }
+	}
+
+	button:active {
+		color: var(--primary-pressed);
+
+    app-icon {
+      color: var(--primary-pressed);
+    }
+	}
+
+	button:disabled {
+		color: var(--colors-gray-500);
+		cursor: not-allowed;
+
+    app-icon {
+      color: var(--colors-gray-500);
+    }
+	}
+}

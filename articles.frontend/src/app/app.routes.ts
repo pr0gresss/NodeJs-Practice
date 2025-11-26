@@ -13,7 +13,7 @@ export const routes: Routes = [
     component: CreateArticlePageComponent,
   },
   {
-    path: 'article/:id',
+    path: 'article/:articleId',
     component: ArticlePageComponent,
   },
 ];

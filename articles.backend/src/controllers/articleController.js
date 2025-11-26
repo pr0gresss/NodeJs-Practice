@@ -1,5 +1,6 @@
 const ArticleService = require("../services/articleService");
-const {getIO} = require("../sockets/socket");
+const SocketService = require("../services/socketService");
+const upload = require("../middleware/upload");
 
 /**
  * @swagger
@@ -162,7 +163,7 @@ exports.create = (req, res) => {
  */
 exports.update = (req, res) => {
 	try {
-		const {id, title, content, attachments = [], socketId} = req.body;
+		const {id, title, content, attachments = [], authorId} = req.body;
 
 		const updated = ArticleService.update({
 			id,
@@ -173,12 +174,12 @@ exports.update = (req, res) => {
 
 		if (!updated) return res.status(404).json({error: "Article not found"});
 
-		const io = getIO();
-		io.to(updated.id).except(socketId).emit("articleUpdated", {
-			id: updated.id,
-			title: updated.title,
-			updatedAt: updated.updatedAt,
-		});
+		SocketService.broadcastToRoomExceptAuthor(
+			updated.id,
+			"articleUpdated",
+			updated,
+			authorId
+		);
 
 		res.status(200).json(updated);
 	} catch (err) {
@@ -256,12 +257,30 @@ exports.delete = (req, res) => {
  *                   type: string
  *       400:
  *         description: No file provided or invalid request
+ *       406:
+ *         description: Invalid file type
  */
 exports.uploadAttachment = (req, res) => {
-	try {
-		const attachment = ArticleService.uploadAttachment(req.file);
-		res.status(200).json(attachment);
-	} catch (err) {
-		res.status(400).json({error: err.message});
-	}
+  upload.single("file")(req, res, (err) => {
+    if (err) {
+      return res.status(err.status || 400).json({
+        error: err.message
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        error: "No file provided."
+      });
+    }
+
+    try {
+      const attachment = ArticleService.uploadAttachment(req.file);
+      return res.status(200).json(attachment);
+    } catch (err) {
+      return res.status(400).json({
+				error: err.message,
+			});
+    }
+  });
 };

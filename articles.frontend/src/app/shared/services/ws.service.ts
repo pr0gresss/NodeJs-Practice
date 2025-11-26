@@ -21,9 +21,13 @@ export class SocketService {
 		});
 	}
 
-	joinArticleRoom(articleId: string) {
-		this.socket.emit("joinArticleRoom", articleId);
-	}
+	joinRoom(roomName: string) {
+		this.emit("room:join", roomName);
+	} 
+
+	leaveRoom(roomName: string) {
+		this.emit("room:leave", roomName);
+	} 
 
 	listen<T>(event: string): Observable<T> {
 		return new Observable(subscriber => {

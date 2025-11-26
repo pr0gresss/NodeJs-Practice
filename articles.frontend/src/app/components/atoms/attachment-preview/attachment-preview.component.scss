@@ -1,14 +1,34 @@
 .attachment {
-  &__image {
-      width: 60px;
-      border-radius: 5px;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      cursor: pointer;
-      position: relative;
+	cursor: pointer;
+	border-radius: 10px;
+	position: relative;
+	display: block;
+	border: 1px solid var(--primary-border);
+  background-color: var(--primary-secondary);
+	height: 60px;
+	width: 60px;
 
-      &:hover {
-        filter: brightness(.7);
-      }
-    }
+	img {
+		padding: 8px;
+		width: 100%;
+		object-fit: cover;
+		position: relative;
+		aspect-ratio: 1/1;
+	}
+
+	&:hover {
+		&::after {
+			content: "";
+			pointer-events: none;
+			display: block;
+			width: 100%;
+			height: 100%;
+			background-color: var(--primary-main);
+			opacity: .2;
+			position: absolute;
+			border-radius: 10px;
+			top: 0;
+			left: 0;
+		}
+	}
 }

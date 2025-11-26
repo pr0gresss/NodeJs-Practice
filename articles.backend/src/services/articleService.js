@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
+const {BASE_URL} = require("../config/environment");
 
 const DATA_DIR = path.join(__dirname, "../../data");
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
 if (!fs.existsSync(DATA_DIR)) {
 	fs.mkdirSync(DATA_DIR);
@@ -31,12 +31,15 @@ class ArticleService {
 		}
 
 		const id = Date.now().toString();
+		const newDate = new Date().toISOString();
+		
 		const article = {
 			id,
 			title,
 			content,
 			attachments,
-			createdAt: new Date().toISOString(),
+			createdAt: newDate,
+			updatedAt: newDate,
 		};
 
 		fs.writeFileSync(
@@ -76,7 +79,6 @@ class ArticleService {
 	}
 
 	static uploadAttachment(file) {
-		console.log(file)
 		if (!file) {
 			throw new Error("No file uploaded");
 		}

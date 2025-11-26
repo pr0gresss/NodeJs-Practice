@@ -29,6 +29,8 @@ const fileFilter = (req, file, cb) => {
 		const err = new Error(
 			"Invalid file type. Only JPG, JPEG, PNG, GIF, and PDF are allowed."
 		);
+		err.status = 406;
+
 		return cb(err, false);
 	}
 

@@ -1,0 +1,37 @@
+<div class="app-input__wrapper" id="input">
+	@if (label()) {
+	<label class="app-input__wrapper__label">{{ label() }}</label>
+	}
+
+	<div class="app-input__wrapper__control" [ngClass]="state()">
+		<input
+			[type]="type()"
+			[value]="value"
+			[placeholder]="placeholder()"
+			(input)="handleInput($event)"
+			(blur)="onTouched()"
+			[disabled]="disabled()"
+			class="app-input__wrapper__control__field"
+		/>
+
+		@if (state() !== 'default') {
+		<div class="app-input__wrapper__control__icon">
+			<app-icon [icon]="state() === 'error' ? 'x-circle' : 'check'"></app-icon>
+		</div>
+		} @else {
+		<ng-container *ngTemplateOutlet="actionIconR"></ng-container>
+		}
+
+		<ng-template #actionIconR>
+			@if (actionIcon()) {
+			<div class="app-input__wrapper__control__icon action">
+				<app-icon [icon]="actionIcon()" />
+			</div>
+			}
+		</ng-template>
+	</div>
+
+	@if(control()!.errors && state() !== "default") {
+	<app-control-errors [errors]="control()!.errors!"></app-control-errors>
+	}
+</div>

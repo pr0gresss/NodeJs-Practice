@@ -1,29 +1,40 @@
+:host {
+	width: 100%;
+}
+
 .card {
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  flex-flow: column nowrap;
-  padding: 5px;
-  gap: 10px;
-  border-radius: 10px;
-  border: solid 1px;
+	cursor: pointer;
+	padding: 10px;
+	position: relative;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	border-radius: 8px;
+	background-color: var(--colors-white);
+	box-shadow: 0px 0px 2px var(--primary-main);
 
-  &__title {
-    font-size: 25px;
-  }
+	&__dates {
+		display: flex;
+		flex-flow: row nowrap;
+		gap: 20px;
+		justify-content: start;
 
-  &__content {
-    font-size: 18px;
-  }
+		&__update {
+			color: var(--colors-gray-700);
+		}
+	}
 
-  &:hover::after  {
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-color: rgba(187, 187, 187, 0.233);
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-radius: 10px;
-  }
+	&:hover::after {
+		content: "";
+		width: 100%;
+		height: 100%;
+		background-color: var(--colors-gray-500);
+		opacity: 0.2;
+		position: absolute;
+		top: 0;
+		left: 0;
+		border-radius: 10px;
+	}
 }

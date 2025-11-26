@@ -8,5 +8,5 @@ import { IAttachment } from '../../../shared/entities/IAttachment';
   styleUrl: './attachment-preview.component.scss',
 })
 export class AttachmentPreviewComponent {
-  public attachment = input<IAttachment | null>(null); 
+  public attachment = input.required<IAttachment>(); 
 }

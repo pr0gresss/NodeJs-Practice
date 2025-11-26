@@ -1,3 +1,4 @@
+<h2><app-icon icon="link" size="large"/>Attachments:</h2>
 @if (attachments()!.length > 0) {
 <div class="attachments">
 	@for (attachment of attachments(); track attachment.filename) {
@@ -5,5 +6,5 @@
 	}
 </div>
 } @else {
-<div class="empty">No files attached.</div>
+<h3 class="empty">No files attached.</h3>
 }

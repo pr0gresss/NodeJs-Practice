@@ -1,10 +1,12 @@
-<div class="container">
+<form class="container" [formGroup]="articleForm">
 	<div class="container__header">
 		@if(currentMode == MODE.EDIT) {
-		<input
+		<app-input
 			class="container__header__title"
 			type="text"
-			[formControl]="articleForm.controls.title"
+			label="Title"
+			placeholder="Enter new article title"
+			formControlName="title"
 		/>
 		} @if(currentMode == MODE.PREVIEW) {
 		<h1 class="container__header__title">
@@ -14,22 +16,21 @@
 
 		<div class="container__header__actions">
 			@if(currentMode == MODE.EDIT) {
-			<button (click)="saveArticle()" [disabled]="articleForm.untouched">
+			<app-button icon="file" variant="outline" (click)="saveArticle()" [disabled]="articleForm.untouched">
 				Save Changes
-			</button>
-			<button (click)="deleteArticle()">Delete article</button>
+			</app-button>
+			<app-button icon="cancel" variant="outline" (click)="deleteArticle()">Delete article</app-button>
 			}
-			<button (click)="toggleMode()">Switch mode</button>
+			<app-button icon="edit" (click)="toggleMode()">Edit</app-button>
 		</div>
 	</div>
 	<div class="container__attachments">
-		<h2>Attachments:</h2>
 		<app-attachments-block
 			[attachments]="articleForm.controls.attachments.value!"
 		/>
 
 		@if(currentMode == MODE.EDIT) {
-		<input
+		<app-upload-button
 			type="file"
 			(change)="handleFileSelection($event)"
 			accept=".jpg,.jpeg,.png,.gif,.pdf"
@@ -39,11 +40,11 @@
 	<div class="container__content">
 		@if (currentMode == MODE.EDIT) {
 		<quill-editor
-			[formControl]="articleForm.controls.content"
+			formControlName="content"
 			theme="snow"
 		></quill-editor>
 		} @if(currentMode == MODE.PREVIEW) {
 		<div class="container__content__inner" [innerHTML]="safeHtml"></div>
 		}
 	</div>
-</div>
+</form>
