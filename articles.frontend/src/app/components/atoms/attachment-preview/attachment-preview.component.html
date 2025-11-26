@@ -2,7 +2,7 @@
 <a class="attachment" [href]="attachment().url" target="_blank">
 	@switch (attachment().mimetype) {
 		@case ("application/pdf") {
-			<img class="attachment__document" src="images/document-pdf.png" [title]="attachment().filename" alt="document"/>
+			<img class="attachment__document" src="assets/images/document-pdf.png" [title]="attachment().filename" alt="document"/>
 		}
 		@case ("image/jpeg") {
 			<img class="attachment__image" [src]="attachment().url" [title]="attachment().filename" [alt]="attachment().filename" />

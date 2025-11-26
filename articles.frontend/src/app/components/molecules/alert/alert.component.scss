@@ -1,0 +1,59 @@
+.alert {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	padding: 10px;
+	border: solid 1px;
+	border-radius: 8px;
+
+	&__info {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+
+		&__message {
+			display: inline-block;
+		}
+	}
+
+	&__close {
+		cursor: pointer;
+	}
+}
+
+[data-type="error"] {
+	background-color: var(--danger-secondary);
+	border-color: var(--danger-border);
+
+	app-icon.alert__icon {
+		color: var(--danger-main);
+	}
+}
+
+[data-type="info"] {
+	background-color: var(--primary-secondary);
+	border-color: var(--primary-border);
+
+	app-icon.alert__icon {
+		color: var(--primary-main);
+	}
+}
+
+[data-type="warn"] {
+	background-color: var(--warning-secondary);
+	border-color: var(--warning-border);
+
+	app-icon.alert__icon {
+		color: var(--warning-main);
+	}
+}
+
+[data-type="success"] {
+	background-color: var(--success-secondary);
+	border-color: var(--success-border);
+
+	app-icon.alert__icon {
+		color: var(--success-main);
+	}
+}

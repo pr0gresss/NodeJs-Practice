@@ -2,6 +2,9 @@
   margin: 0 auto;
   display: flex;
   max-width: 1200px;
-  flex-flow: column nowrap;
-  gap: 10px;
+  padding: 0px 40px;
+  flex-flow: column;
+  justify-content: center;
+  align-items: start;
+  gap: 20px;
 }

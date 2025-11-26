@@ -1,5 +1,6 @@
 const ArticleService = require("../services/articleService");
 const SocketService = require("../services/socketService");
+const upload = require("../middleware/upload");
 
 /**
  * @swagger
@@ -256,12 +257,30 @@ exports.delete = (req, res) => {
  *                   type: string
  *       400:
  *         description: No file provided or invalid request
+ *       406:
+ *         description: Invalid file type
  */
 exports.uploadAttachment = (req, res) => {
-	try {
-		const attachment = ArticleService.uploadAttachment(req.file);
-		res.status(200).json(attachment);
-	} catch (err) {
-		res.status(400).json({error: err.message});
-	}
+  upload.single("file")(req, res, (err) => {
+    if (err) {
+      return res.status(err.status || 400).json({
+        error: err.message
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        error: "No file provided."
+      });
+    }
+
+    try {
+      const attachment = ArticleService.uploadAttachment(req.file);
+      return res.status(200).json(attachment);
+    } catch (err) {
+      return res.status(400).json({
+				error: err.message,
+			});
+    }
+  });
 };

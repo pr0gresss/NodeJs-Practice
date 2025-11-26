@@ -1,19 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 @import "quill/dist/quill.core.css";
-@import "quill/dist/quill.snow.css"; 
+@import "quill/dist/quill.snow.css";
+
+@font-face {
+	font-family: "icomoon";
+	src: url("/assets/fonts/icomoon/icomoon.eot?lo0z2r");
+	src: url("/assets/fonts/icomoon/icomoon.eot?lo0z2r#iefix")
+			format("embedded-opentype"),
+		url("/assets/fonts/icomoon/icomoon.ttf?lo0z2r") format("truetype"),
+		url("/assets/fonts/icomoon/icomoon.woff?lo0z2r") format("woff"),
+		url("/assets/fonts/icomoon/icomoon.svg?lo0z2r#icomoon") format("svg");
+	font-weight: normal;
+	font-style: normal;
+	font-display: block;
+}
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "noto sans", sans-serif;
 }
 
-input {
-  font-size: 16px;
-  padding: 5px;
+quill-editor {
+	background-color: var(--colors-white);
 }
 
-button {
-  padding: 6px;
-  font-size: 18px;
+body {
+	background-color: var(--colors-gray-200);
+}
+
+h1,
+h2,
+h3,
+p,
+li,
+ul,
+ol {
+	color: var(--colors-black);
+}
+
+a {
+	color: var(--colors-gray-700);
+	text-decoration: none;
+
+	&:hover {
+		color: var(--primary-hover);
+	}
+
+	&:focus:not(:focus-visible) {
+		box-shadow: none;
+	}
+
+	&:focus-visible {
+		outline: solid 2px var(--primary-focus);
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+
+	&:active {
+		color: var(--primary-pressed);
+	}
+}
+
+// Headings
+
+h1 {
+	font-size: 30px;
+	line-height: 36px;
+}
+
+h2 {
+	font-size: 24px;
+	line-height: 31px;
+}
+
+h3 {
+	font-size: 20px;
+	line-height: 26px;
+}
+
+p {
+	font-size: 16px;
+	line-height: 24px;
+}
+
+// Colors
+:root {
+	--colors-white: #ffffff;
+	--colors-gray-200: #f5f5f5;
+	--colors-gray-300: #ededed;
+	--colors-gray-400: #c2c2c2;
+	--colors-gray-500: #e0e0e0;
+	--colors-gray-600: #9e9e9e;
+	--colors-gray-700: #757575;
+	--colors-gray-800: #616161;
+	--colors-gray-900: #424242;
+	--colors-black: #0a0a0a;
+
+	--primary-border: #5e47d2;
+	--primary-focus: #ac9ff0;
+	--primary-hover: #3817d8;
+	--primary-pressed: #210f7f;
+	--primary-secondary: #f7f4ff;
+	--primary-main: #5a3fe1;
+
+	--danger-border: #e2b6b6;
+	--danger-focus: #ffdfdf;
+	--danger-hover: #8c1f1f;
+	--danger-pressed: #541212;
+	--danger-secondary: #eed3d3;
+	--danger-main: #a82525;
+
+	--info-border: #aab6f4;
+	--info-focus: #e2e6ff;
+	--info-hover: #001db8;
+	--info-pressed: #001793;
+	--info-secondary: #ccd3f8;
+	--info-main: #0023dd;
+
+	--success-border: #b5d0c9;
+	--success-focus: #c7eae1;
+	--success-hover: #1b5f4e;
+	--success-pressed: #164c3f;
+	--success-secondary: #d2e2de;
+	--success-main: #21725e;
+
+	--warning-border: #f5efb9;
+	--warning-focus: #fcf8ce;
+	--warning-hover: #baab24;
+	--warning-pressed: #95891d;
+	--warning-secondary: #f9f5d5;
+	--warning-main: #e0ce2c;
 }

@@ -31,12 +31,15 @@ class ArticleService {
 		}
 
 		const id = Date.now().toString();
+		const newDate = new Date().toISOString();
+		
 		const article = {
 			id,
 			title,
 			content,
 			attachments,
-			createdAt: new Date().toISOString(),
+			createdAt: newDate,
+			updatedAt: newDate,
 		};
 
 		fs.writeFileSync(

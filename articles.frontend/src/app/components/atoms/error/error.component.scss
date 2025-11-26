@@ -1,0 +1,17 @@
+:host {
+	display: inline;
+}
+
+.error {
+	display: flex;
+	flex-flow: row nowrap;
+  align-items: center;
+  font-size: 14px;
+  line-height: 20px;
+	gap: 4px;
+	color: var(--danger-main);
+
+  app-icon {
+    color: var(--danger-main);
+  }
+}

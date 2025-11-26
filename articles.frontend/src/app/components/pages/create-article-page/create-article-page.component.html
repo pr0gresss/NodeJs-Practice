@@ -1,17 +1,24 @@
 <div class="container">
 	<form class="form" [formGroup]="articleForm" (ngSubmit)="handleFormSubmit()">
-		<h2>Create new article form</h2>
-		<input placeholder="Title" formControlName="title" />
+		<h1>Create new article form</h1>
+		<app-input
+    label="Title"
+    formControlName="title"
+    inputType="text"
+		placeholder="Enter article title"
+    icon="letter"
+  ></app-input>
 		<quill-editor formControlName="content" theme="snow"></quill-editor>
-		<h3>Attachments:</h3>
 		<div class="form__attachments">
-			<app-attachments-block [attachments]="articleForm.controls.attachments.value!"/>
+			<app-attachments-block
+				[attachments]="articleForm.controls.attachments.value!"
+			/>
 		</div>
-		<input
+		<app-upload-button
 			type="file"
 			(change)="handleFileSelection($event)"
 			accept=".jpg,.jpeg,.png,.gif,.pdf"
 		/>
-		<button type="ngSubmit">Post new article</button>
+		<app-button type="ngSubmit">Post new article</app-button>
 	</form>
 </div>

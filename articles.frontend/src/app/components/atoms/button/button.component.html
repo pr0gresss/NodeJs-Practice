@@ -1,0 +1,6 @@
+<button [disabled]="disabled()">
+  @if (icon()) {
+    <app-icon [icon]="icon()"></app-icon>
+  }
+  <ng-content></ng-content>
+</button>

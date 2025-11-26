@@ -12,29 +12,42 @@ import {IArticle} from "../../../shared/entities/IArticle";
 import {Router} from "@angular/router";
 import {IAttachment} from "../../../shared/entities/IAttachment";
 import {AttachmentsBlockComponent} from "../../molecules/attachments-block/attachments-block.component";
+import {AlertService} from "../../../shared/services/alert.service";
+import {ButtonComponent} from "../../atoms/button/button.component";
+import { InputComponent } from "../../atoms/input/input.component";
+import { UploadButtonComponent } from "../../atoms/upload-button/upload-button.component";
 
 @Component({
 	selector: "app-create-article-page",
 	imports: [
-		QuillModule,
-		CommonModule,
-		ReactiveFormsModule,
-		AttachmentsBlockComponent,
-	],
+    QuillModule,
+    CommonModule,
+    ReactiveFormsModule,
+    AttachmentsBlockComponent,
+    ButtonComponent,
+    InputComponent,
+    UploadButtonComponent
+],
 	templateUrl: "./create-article-page.component.html",
 	styleUrl: "./create-article-page.component.scss",
 })
 export class CreateArticlePageComponent {
 	private _router = inject(Router);
 	private _articleService = inject(ArticleService);
+	private _alertService = inject(AlertService);
+
 	public articleForm = new FormGroup({
 		title: new FormControl<string>("", {
 			nonNullable: true,
-			validators: [Validators.required],
+			validators: [
+				Validators.maxLength(40),
+				Validators.minLength(3),
+				Validators.required
+			],
 		}),
 		content: new FormControl<string>("", {
 			nonNullable: true,
-			validators: [Validators.required],
+			validators: [Validators.required, Validators.minLength(20)],
 		}),
 		attachments: new FormControl<IAttachment[]>([]),
 	});
@@ -52,23 +65,51 @@ export class CreateArticlePageComponent {
 					...current,
 					attachment,
 				]);
+				this._alertService.show({
+					message: "Attachment was uploaded!",
+					type: "success",
+					timeout: 5000,
+				});
 				input.value = "";
 			},
 			error: err => {
-				alert(err);
+				console.log(JSON.stringify(err.error));
+				this._alertService.show({
+					message: err.error.error,
+					type: "error",
+					timeout: 5000,
+				});
 				input.value = "";
 			},
 		});
 	}
 
 	public handleFormSubmit() {
+		if (!this.articleForm.valid) return;
+
 		const newArticle = this.articleForm.value as IArticle;
 
 		this._articleService.postArticle(newArticle).subscribe({
 			next: res => {
+				this._alertService.show({
+					message: "Article was created!",
+					type: "success",
+					timeout: 5000,
+				});
+				this._alertService.show({
+					message: "Redirecting to new Article...",
+					type: "info",
+					timeout: 5000,
+				});
 				this._router.navigate(["article", res.id!]);
 			},
-			error: err => alert(err.error.error),
+			error: err => {
+				this._alertService.show({
+					message: err.error.error,
+					type: "error",
+					timeout: 5000,
+				});
+			},
 		});
 	}
 }
