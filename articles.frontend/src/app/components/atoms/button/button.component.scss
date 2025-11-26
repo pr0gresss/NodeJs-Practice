@@ -1,5 +1,5 @@
 button {
-	border: 0;
+	border: none;
 	outline: none;
 
 	display: inline-flex;
@@ -71,9 +71,13 @@ button {
 	}
 
 	button:disabled {
-		background: var(--colors-gray-200);
-		color: var(--colors-gray-500);
-		cursor: not-allowed;
+		background: var(--colors-gray-200) !important;
+		color: var(--colors-gray-500) !important;
+		cursor: not-allowed !important;
+		
+		app-icon {
+			color: var(--colors-gray-500) !important;
+		}
 	}
 }
 
@@ -124,12 +128,12 @@ button {
 	}
 
 	button:disabled {
-		background: var(--colors-gray-200);
-		color: var(--colors-gray-500);
-		cursor: not-allowed;
+		background: var(--colors-gray-200) !important;
+		color: var(--colors-gray-500) !important;
+		cursor: not-allowed !important;
 
     app-icon {
-      color: var(--colors-gray-500);
+      color: var(--colors-gray-500) !important;
     }
 	}
 }
@@ -180,13 +184,13 @@ button {
 	}
 
 	button:disabled {
-		background: var(--colors-gray-200);
-		color: var(--colors-gray-500);
-    box-shadow: 0 0 0 1px var(--colors-gray-400) inset;
-		cursor: not-allowed;
+		background: var(--colors-gray-200) !important;
+		color: var(--colors-gray-500) !important;
+    box-shadow: 0 0 0 1px var(--colors-gray-400) inset !important;
+		cursor: not-allowed !important;
 
     app-icon {
-      color: var(--colors-gray-500);
+      color: var(--colors-gray-500) !important;
     }
 	}
 }
@@ -235,11 +239,11 @@ button {
 	}
 
 	button:disabled {
-		color: var(--colors-gray-500);
-		cursor: not-allowed;
+		color: var(--colors-gray-500) !important;
+		cursor: not-allowed !important;
 
     app-icon {
-      color: var(--colors-gray-500);
+      color: var(--colors-gray-500) !important;
     }
 	}
 }

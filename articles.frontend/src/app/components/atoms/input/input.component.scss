@@ -2,7 +2,7 @@
 	width: 100%;
 }
 
-.app-input__wrapper {
+.wrapper {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
@@ -10,6 +10,7 @@
 	&__label {
 		font-size: 16px;
 		line-height: 24px;
+		color: var(--colors-gray-900);
 	}
 
 	&__control {
@@ -21,17 +22,26 @@
 			color: var(--colors-gray-700);
 		}
 
-		&__field {
+		&__input {
 			flex: 1;
-			padding-right: 40px;
 			padding: 6px 12px;
+			padding-right: 40px;
 			border: none;
+			outline: none;
 			border-radius: 4px;
-			outline: 1px solid var(--colors-gray-600);
+			box-shadow: 0 0 0 1px var(--colors-gray-600) inset;
 			background-color: var(--colors-white);
+			transition: 0.2s ease-in-out;
+			color: var(--colors-gray-700);
+			font-size: 14px;
+			line-height: 20px;
 
-			&::placeholder {
-				color: var(--colors-gray-700);
+			&:hover:not(:disabled) {
+				box-shadow: 0 0 0 1px var(--primary-main) inset;
+			}
+
+			&:focus-visible {
+				box-shadow: 0 0 0 2px var(--primary-focus) inset;
 			}
 		}
 
@@ -48,39 +58,48 @@
 	}
 }
 
-#input.error {
+.wrapper.error {
+	label {
+		color: var(--danger-main)  !important;
+	}
+
 	input {
-		outline-color: var(--danger-main);
+		box-shadow: 0 0 0 1px var(--danger-main) inset !important;
 	}
 
 	app-icon {
-		color: var(--danger-main);
+		color: var(--danger-main) !important;
 	}
 }
 
-#input.success {
+.wrapper.success {
+	label {
+		color: var(--success-main) !important;
+	}
+
 	input {
-		outline-color: var(--success-main);
+		box-shadow: 0 0 0 1px var(--success-main) inset !important;
 	}
 
 	app-icon {
-		color: var(--success-main);
+		color: var(--success-main) !important;
 	}
 }
 
-#input {
-  label {
-    color: var(--colors-gray-600);
-  }
+.wrapper {
+	label {
+		color: var(--colors-gray-600) !important;
+		cursor: not-allowed;
+	}
 
 	input:disabled {
-    cursor: not-allowed;
-    background-color: var(--colors-gray-200);
+		cursor: not-allowed;
+		background-color: var(--colors-gray-200);
 		outline-color: var(--colors-gray-500);
-    color: var(--colors-gray-700);
+		color: var(--colors-gray-700);
 	}
 
 	app-icon {
-		color: var(--success-main);
+		color: var(--colors-gray-600);
 	}
 }
