@@ -1,9 +1,9 @@
-<div class="app-input__wrapper" id="input">
+<div class="wrapper" id="input" [ngClass]="state()"> 
 	@if (label()) {
-	<label class="app-input__wrapper__label">{{ label() }}</label>
+	<label for="input-field" id="input-label" class="wrapper__label">{{ label() }}</label>
 	}
 
-	<div class="app-input__wrapper__control" [ngClass]="state()">
+	<div class="wrapper__control">
 		<input
 			[type]="type()"
 			[value]="value"
@@ -11,12 +11,12 @@
 			(input)="handleInput($event)"
 			(blur)="onTouched()"
 			[disabled]="disabled()"
-			class="app-input__wrapper__control__field"
+			class="wrapper__control__input"
 		/>
 
 		@if (state() !== 'default') {
-		<div class="app-input__wrapper__control__icon">
-			<app-icon [icon]="state() === 'error' ? 'x-circle' : 'check'"></app-icon>
+		<div class="wrapper__control__icon">
+			<app-icon  [icon]="state() === 'error' ? 'x-circle' : 'check'"></app-icon>
 		</div>
 		} @else {
 		<ng-container *ngTemplateOutlet="actionIconR"></ng-container>
@@ -24,7 +24,7 @@
 
 		<ng-template #actionIconR>
 			@if (actionIcon()) {
-			<div class="app-input__wrapper__control__icon action">
+			<div class="wrapper__control__icon action">
 				<app-icon [icon]="actionIcon()" />
 			</div>
 			}

@@ -11,13 +11,13 @@
 	justify-content: space-between;
 	align-items: center;
 	gap: 20px;
-	border-radius: 8px;
+	border-radius: 6px;
 	background-color: var(--colors-white);
-	box-shadow: 0px 0px 2px var(--primary-main);
+	box-shadow: 0 0 0 1px var(--primary-main);
 
 	&__dates {
 		display: flex;
-		flex-flow: row nowrap;
+		flex-flow: row wrap;
 		gap: 20px;
 		justify-content: start;
 

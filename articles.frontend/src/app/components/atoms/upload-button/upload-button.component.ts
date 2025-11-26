@@ -12,5 +12,5 @@ export class UploadButtonComponent {
   public input!: ElementRef<HTMLInputElement>;
 
   public accept = input<string>();
-  public disabled = input<boolean>();
+  public disabled = input<boolean>(false);
 }
