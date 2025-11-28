@@ -1,0 +1,35 @@
+.wrapper {
+	display: flex;
+	flex-flow: column;
+	gap: 4px;
+
+	&__label {
+		font-size: 16px;
+		line-height: 24px;
+		color: var(--colors-gray-900);
+	}
+
+	quill-editor {
+		border-radius: 2px;
+	}
+}
+
+.wrapper.error {
+	label {
+		color: var(--danger-main);
+	}
+
+	quill-editor {
+		outline: 1px solid var(--danger-main);
+	}
+}
+
+.wrapper.success {
+	label {
+		color: var(--success-main);
+	}
+	
+	quill-editor {
+		outline: 1px solid var(--success-main);
+	}
+}

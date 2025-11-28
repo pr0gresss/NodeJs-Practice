@@ -26,6 +26,7 @@ import {ButtonComponent} from "../../atoms/button/button.component";
 import {UploadButtonComponent} from "../../atoms/upload-button/upload-button.component";
 import {InputComponent} from "../../atoms/input/input.component";
 import { ControlErrorsComponent } from "../../atoms/control-errors/control-errors.component";
+import { WysiwygInputComponent } from "../../atoms/wysiwyg-input/wysiwyg-input.component";
 
 enum EArticleMode {
 	PREVIEW,
@@ -35,14 +36,14 @@ enum EArticleMode {
 @Component({
 	selector: "app-article-page",
 	imports: [
-		QuillModule,
-		ButtonComponent,
-		ReactiveFormsModule,
-		AttachmentsBlockComponent,
-		UploadButtonComponent,
-		InputComponent,
-		ControlErrorsComponent
-	],
+    ButtonComponent,
+    ReactiveFormsModule,
+    AttachmentsBlockComponent,
+    UploadButtonComponent,
+    InputComponent,
+    ControlErrorsComponent,
+    WysiwygInputComponent
+],
 	templateUrl: "./article-page.component.html",
 	styleUrl: "./article-page.component.scss",
 })

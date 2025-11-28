@@ -8,7 +8,7 @@
 		placeholder="Enter article title"
     icon="letter"
   ></app-input>
-		<quill-editor formControlName="content" theme="snow"></quill-editor>
+		 <app-wysiwyg-input theme="snow" label="Content" formControlName="content"></app-wysiwyg-input>
 		<div class="form__attachments">
 			<app-attachments-block
 				[attachments]="articleForm.controls.attachments.value!"
