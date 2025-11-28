@@ -32,7 +32,6 @@ class ArticleService {
 			],
 		});
 
-		console.log("fdgfggdffdggfd",id, article);
 		return article || null;
 	}
 
