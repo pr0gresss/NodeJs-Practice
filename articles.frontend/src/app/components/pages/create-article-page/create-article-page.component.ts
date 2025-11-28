@@ -73,7 +73,6 @@ export class CreateArticlePageComponent {
 				input.value = "";
 			},
 			error: err => {
-				console.log(JSON.stringify(err.error));
 				this._alertService.show({
 					message: err.error.error,
 					type: "error",

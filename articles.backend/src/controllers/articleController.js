@@ -36,8 +36,8 @@ const upload = require("../middleware/upload");
  *                         uploadedAt:
  *                           type: string
  */
-exports.getAll = (req, res) => {
-	const articles = ArticleService.getAll();
+exports.getAll = async (req, res) => {
+	const articles = await ArticleService.getAll();
 	res.status(200).json(articles);
 };
 
@@ -60,8 +60,8 @@ exports.getAll = (req, res) => {
  *       404:
  *         description: Article not found
  */
-exports.getById = (req, res) => {
-	const article = ArticleService.getById(req.params.id);
+exports.getById = async (req, res) => {
+	const article = await ArticleService.getById(req.params.id);
 	if (!article) return res.status(404).json({error: "Article not found"});
 	res.status(200).json(article);
 };
@@ -103,11 +103,11 @@ exports.getById = (req, res) => {
  *       400:
  *         description: Invalid request
  */
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
 	try {
 		const {title, content, attachments = []} = req.body;
 
-		const article = ArticleService.create({
+		const article = await ArticleService.create({
 			title,
 			content,
 			attachments,
@@ -161,11 +161,11 @@ exports.create = (req, res) => {
  *       404:
  *         description: Article not found
  */
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 	try {
 		const {id, title, content, attachments = [], authorId} = req.body;
 
-		const updated = ArticleService.update({
+		const updated = await ArticleService.update({
 			id,
 			title,
 			content,
@@ -206,11 +206,11 @@ exports.update = (req, res) => {
  *       404:
  *         description: Article not found
  */
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
 	try {
 		const {id} = req.params;
 
-		const deleted = ArticleService.delete(id);
+		const deleted = await ArticleService.delete(id);
 
 		if (!deleted) return res.status(404).json({error: "Article not found"});
 
@@ -261,7 +261,7 @@ exports.delete = (req, res) => {
  *         description: Invalid file type
  */
 exports.uploadAttachment = (req, res) => {
-  upload.single("file")(req, res, (err) => {
+  upload.single("file")(req, res, async (err) => {
     if (err) {
       return res.status(err.status || 400).json({
         error: err.message
@@ -275,7 +275,7 @@ exports.uploadAttachment = (req, res) => {
     }
 
     try {
-      const attachment = ArticleService.uploadAttachment(req.file);
+      const attachment = await ArticleService.uploadAttachment(req.file);
       return res.status(200).json(attachment);
     } catch (err) {
       return res.status(400).json({

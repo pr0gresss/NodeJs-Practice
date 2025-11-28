@@ -43,6 +43,9 @@
 			formControlName="content"
 			theme="snow"
 		></quill-editor>
+		@if (articleForm.controls.content.errors) {
+			<app-control-errors [errors]="articleForm.controls.content.errors"/>
+		}
 		} @if(currentMode == MODE.PREVIEW) {
 		<div class="container__content__inner" [innerHTML]="safeHtml"></div>
 		}

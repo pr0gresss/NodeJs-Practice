@@ -1,0 +1,4 @@
+<quill-editor [valueSetter]="control()!.value!" />
+@if(control()!.errors! && state() !== "default") {
+<app-control-errors [errors]="control()!.errors!" />
+}
