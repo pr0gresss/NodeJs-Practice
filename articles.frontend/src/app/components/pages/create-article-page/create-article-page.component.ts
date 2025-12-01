@@ -88,7 +88,6 @@ export class CreateArticlePageComponent {
 		if (!this.articleForm.valid) return;
 
 		const newArticle = this.articleForm.value as IArticle;
-		console.log(newArticle)
 
 		this._articleService.postArticle(newArticle).subscribe({
 			next: res => {

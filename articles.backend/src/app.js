@@ -5,6 +5,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 const articleRoutes = require("./routes/articleRoutes");
 const workspaceRoutes = require("./routes/workspaceRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 const morgan = require("morgan");
 const {SWAGGER_ENDPOINT, FRONTEND_URL} = require("./config/environment");
 
@@ -21,6 +22,6 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/" + SWAGGER_ENDPOINT, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
-app.use("/", [articleRoutes, workspaceRoutes]);
+app.use("/", [articleRoutes, workspaceRoutes, commentRoutes]);
 
 module.exports = {app, FRONTEND_URL, SWAGGER_ENDPOINT};

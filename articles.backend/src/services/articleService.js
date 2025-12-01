@@ -41,7 +41,10 @@ class ArticleService {
 		}
 
 		return await sequelize.transaction(async t => {
-			const article = await Article.create({title, content}, {transaction: t});
+			const article = await Article.create(
+				{title, workspaceId, content},
+				{transaction: t}
+			);
 
 			if (attachments.length) {
 				await ArticleAttachment.bulkCreate(

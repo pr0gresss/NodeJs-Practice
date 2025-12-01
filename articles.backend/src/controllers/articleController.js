@@ -105,10 +105,11 @@ exports.getById = async (req, res) => {
  */
 exports.create = async (req, res) => {
 	try {
-		const {title, content, attachments = []} = req.body;
+		const {title, workspaceId, content, attachments = []} = req.body;
 
 		const article = await ArticleService.create({
 			title,
+			workspaceId,
 			content,
 			attachments,
 		});
@@ -261,26 +262,26 @@ exports.delete = async (req, res) => {
  *         description: Invalid file type
  */
 exports.uploadAttachment = (req, res) => {
-  upload.single("file")(req, res, async (err) => {
-    if (err) {
-      return res.status(err.status || 400).json({
-        error: err.message
-      });
-    }
-
-    if (!req.file) {
-      return res.status(400).json({
-        error: "No file provided."
-      });
-    }
-
-    try {
-      const attachment = await ArticleService.uploadAttachment(req.file);
-      return res.status(200).json(attachment);
-    } catch (err) {
-      return res.status(400).json({
+	upload.single("file")(req, res, async err => {
+		if (err) {
+			return res.status(err.status || 400).json({
 				error: err.message,
 			});
-    }
-  });
+		}
+
+		if (!req.file) {
+			return res.status(400).json({
+				error: "No file provided.",
+			});
+		}
+
+		try {
+			const attachment = await ArticleService.uploadAttachment(req.file);
+			return res.status(200).json(attachment);
+		} catch (err) {
+			return res.status(400).json({
+				error: err.message,
+			});
+		}
+	});
 };
