@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 			this.hasMany(models.Article, {
 				foreignKey: "workspaceId",
 				as: "articles",
+				onDelete: "CASCADE"
 			});
 		}
 	}

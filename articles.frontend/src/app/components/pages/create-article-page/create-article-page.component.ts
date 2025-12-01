@@ -63,7 +63,9 @@ export class CreateArticlePageComponent implements OnInit {
 
 	public ngOnInit(): void {
 		this._workspaceService.getWorkspaces().subscribe({
-			next: data => this.workspaces.set(data),
+			next: data => {
+				this.articleForm.controls.workspaceId.setValue(data[0].id!)
+				this.workspaces.set(data)},
 		});
 	}
 
@@ -115,7 +117,7 @@ export class CreateArticlePageComponent implements OnInit {
 					type: "info",
 					timeout: 5000,
 				});
-				this._router.navigate(["workspace", "articles", res.id!]);
+				this._router.navigate(["articles", res.id!]);
 			},
 			error: err => {
 				this._alertService.show({

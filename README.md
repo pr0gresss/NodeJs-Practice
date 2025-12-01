@@ -22,7 +22,7 @@ npm run db:migrate
 
 ### 🔧 .env file example
 ```bash
-DB_HOST="DB_HOST"
+DB_HOST="localhost"
 DB_PORT=DB_PORT
 DB_USER="DB_USER"
 DB_PASSWORD="DB_PASSWORD"
@@ -30,8 +30,8 @@ DB_NAME="DB_NAME"
 DB_SSL="true"
 SWAGGER_ENDPOINT="docs"
 BASE_PORT=BASE_PORT
-BASE_HOST="BACKEND_HOST"
-FRONTEND_HOST="FRONTEND_HOST"
+BASE_HOST="http://localhost"
+FRONTEND_HOST="http://localhost"
 FRONTEND_PORT=FRONTEND_PORT
 ```
 
