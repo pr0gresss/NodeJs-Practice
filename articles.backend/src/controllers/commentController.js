@@ -39,20 +39,15 @@ exports.getAll = async (req, res) => {
  *         description: No comments found
  */
 exports.getByArticleId = async (req, res) => {
-  try {
-    const { articleId } = req.params;
-    const comments = await CommentService.getByArticleId(articleId);
-    if (!comments || comments.length === 0) {
-      return res.status(404).json({ error: "No comments found for this article" });
-    }
+	try {
+		const {articleId} = req.params;
+		const comments = await CommentService.getByArticleId(articleId);
 
-    res.status(200).json(comments);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+		res.status(200).json(comments);
+	} catch (err) {
+		res.status(500).json({error: err.message});
+	}
 };
-
-
 
 /**
  * @swagger
@@ -78,15 +73,15 @@ exports.getByArticleId = async (req, res) => {
  *         description: Comment created
  */
 exports.create = async (req, res) => {
-  try {
-    const { articleId, content } = req.body;
+	try {
+		const {articleId, content} = req.body;
 
-    const comment = await CommentService.create({ articleId, content });
+		const comment = await CommentService.create({articleId, content});
 
-    res.status(201).json(comment);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+		res.status(201).json(comment);
+	} catch (err) {
+		res.status(400).json({error: err.message});
+	}
 };
 
 /**

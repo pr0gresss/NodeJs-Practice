@@ -9,18 +9,35 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "articleId",
 				otherKey: "attachmentId",
 			});
+			this.belongsTo(models.Workspace, {
+				foreignKey: "workspaceId",
+				as: "workspace",
+			});
+			this.hasMany(models.Comment, {
+				as: "comments",
+				foreignKey: "articleId",
+				onDelete: "CASCADE",
+			});
 		}
 	}
 	Article.init(
 		{
 			id: {
-				type: DataTypes.UUID, 
+				type: DataTypes.UUID,
 				primaryKey: true,
 				allowNull: false,
-				defaultValue: DataTypes.UUIDV4
+				defaultValue: DataTypes.UUIDV4,
 			},
 			title: DataTypes.STRING,
 			content: DataTypes.STRING,
+			workspaceId: {
+				allowNull: false,
+				type: DataTypes.UUID,
+				references: {
+					model: "Workspaces",
+					key: "id",
+				},
+			},
 		},
 		{
 			sequelize,

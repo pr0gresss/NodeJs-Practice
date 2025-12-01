@@ -1,0 +1,14 @@
+:host {
+	display: flex;
+	flex-flow: column;
+	gap: 20px;
+}
+
+.empty {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 10px;
+	justify-content: center;
+	align-items: center;
+	min-height: 20vh;
+}

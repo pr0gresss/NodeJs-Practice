@@ -1,5 +1,5 @@
 <div class="container">
-	<form class="form" [formGroup]="articleForm" (ngSubmit)="handleFormSubmit()">
+	<form class="form" [formGroup]="articleForm">
 		<h1>Create new article form</h1>
 		<app-input
     label="Title"
@@ -7,7 +7,17 @@
     inputType="text"
 		placeholder="Enter article title"
     icon="letter"
-  ></app-input>
+  />
+	<app-select
+    label="Workspace"
+		displayField="name"
+		valueField="id"
+		[options]="workspaces()!"
+    formControlName="workspaceId"
+    inputType="text"
+		placeholder="Enter article title"
+    icon="letter"
+  />
 		 <app-wysiwyg-input theme="snow" label="Content" formControlName="content"></app-wysiwyg-input>
 		<div class="form__attachments">
 			<app-attachments-block
@@ -19,6 +29,6 @@
 		/>
 		</div>
 		
-		<app-button type="ngSubmit">Post new article</app-button>
+		<app-button (click)="handleFormSubmit()">Post new article</app-button>
 	</form>
 </div>

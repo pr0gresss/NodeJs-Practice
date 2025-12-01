@@ -3,9 +3,9 @@ const {Model} = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class Workspace extends Model {
 		static associate(models) {
-			this.belongsToMany(models.Article, {
-				as: "article",
+			this.hasMany(models.Article, {
 				foreignKey: "workspaceId",
+				as: "articles",
 			});
 		}
 	}
@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
+			timestamps: true,
 			modelName: "Workspace",
 		}
 	);

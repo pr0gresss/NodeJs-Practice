@@ -1,0 +1,8 @@
+<div class="container">
+	<form action="workspace__form" [formGroup]="workspaceForm">
+		<app-select [options]="workspaces()!" displayField="name" valueField="id" formControlName="workspace"></app-select>
+	</form>
+  @for(article of articles(); track article.id) {
+  <app-article-card [article]="article"></app-article-card>
+  }
+</div>

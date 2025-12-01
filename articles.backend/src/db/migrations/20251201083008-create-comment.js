@@ -16,6 +16,7 @@ module.exports = {
 					model: "Articles",
 					key: "id",
 				},
+				onDelete: "CASCADE",
 			},
 			content: {
 				type: Sequelize.STRING,

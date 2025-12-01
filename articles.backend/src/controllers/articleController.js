@@ -68,6 +68,37 @@ exports.getById = async (req, res) => {
 
 /**
  * @swagger
+ * /articles/workspace/{workspaceId}:
+ *   get:
+ *     summary: Get articles by Workspace ID
+ *     tags: [Articles]
+ *     parameters:
+ *       - in: path
+ *         name: workspaceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The workspace ID
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved articles
+ *       404:
+ *         description: Workspace not found
+ */
+exports.getByWorkspaceId = async (req, res) => {
+	try {
+		const workspaceId = req.params.workspaceId;
+		const articles = await ArticleService.getByWorkspaceId(workspaceId);
+
+		return res.status(200).json(articles);
+	} catch (err) {
+		console.error("Failed to fetch workspace articles:", err);
+		return res.status(500).json({error: "Server error"});
+	}
+};
+
+/**
+ * @swagger
  * /articles:
  *   post:
  *     summary: Create a new article

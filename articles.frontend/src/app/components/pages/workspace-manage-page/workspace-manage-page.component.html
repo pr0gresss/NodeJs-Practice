@@ -1,0 +1,41 @@
+<div class="container">
+	<form class="workspace__form" [formGroup]="workspaceForm">
+		<h2>Create new workspace:</h2>
+		<app-input
+			label="Name"
+			formControlName="name"
+			placeholder="Enter workspace name"
+		/>
+		<app-button icon="plus" size="small" (click)="handleWorkspaceCreate()"
+			>Create new workspace</app-button
+		>
+	</form>
+
+	<div class="workspace__list">
+		<h2>All workspaces:</h2>
+		@for (workspace of workspaces(); track workspace) {
+		<div class="workspace__list__card">
+			<div class="workspace__list__card__data">
+				<div class="workspace__list__card__data__info">
+					{{ workspace.name }}
+					<span class="workspace__list__card__data__info__id">{{
+						workspace.id
+					}}</span>
+				</div>
+				<div class="workspace__list__card__data__dates">
+					<span class="workspace__list__card__data__dates__created"
+						>Created at: {{ workspace.createdAt | date : "medium" }}</span
+					>
+					<span class="workspace__list__card__data__dates__updated"
+						>Updated at: {{ workspace.updatedAt | date : "medium" }}</span
+					>
+				</div>
+			</div>
+			<div class="workspace__list__card__actions">
+				<app-button icon="cancel" variant="outline">Delete</app-button>
+				<app-button icon="edit">Edit</app-button>
+			</div>
+		</div>
+		}
+	</div>
+</div>

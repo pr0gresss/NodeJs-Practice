@@ -1,0 +1,15 @@
+<div class="wrapper">
+	@if(label()) {
+		<label class="wrapper__label" for="input">{{label()}}</label>
+	}
+
+	<select class="wrapper__input" id="input"
+		[disabled]="disabled()"
+		[value]="internalValue()"
+		(change)="selectValue($event)"
+	>
+		@for(option of options(); track option) {
+		<option [value]="option[valueField()]">{{ option[displayField()] }}</option>
+		}
+	</select>
+</div>

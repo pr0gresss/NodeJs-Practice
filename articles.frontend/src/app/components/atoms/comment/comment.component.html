@@ -1,0 +1,7 @@
+<div class="comment">
+	<div class="comment__content">{{comment().content}}</div>
+	<div class="comment__dates">
+		<span>Posted at: {{comment().createdAt! | date:"medium"}}</span> 
+		<span>Updated at: {{comment().updatedAt! | date:"medium"}}</span>
+	</div>
+</div>

@@ -1,0 +1,13 @@
+.comment {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 10px;
+	font-size: 20px;
+
+	&__dates {
+		display: flex;
+		font-size: 14px;
+		gap: 20px;
+		color: var(--colors-gray-600);
+	}
+}
