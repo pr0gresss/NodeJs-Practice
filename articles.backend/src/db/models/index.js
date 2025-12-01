@@ -3,7 +3,7 @@ const DataTypes = require("sequelize")
 const Article = require("./article")(sequelize, DataTypes);
 const Attachment = require("./attachment")(sequelize, DataTypes);
 const ArticleAttachment = require("./articleattachment")(sequelize, DataTypes);
-
+const Workspace = require("./workspace")(sequelize, DataTypes);
 
 const models = {Article, Attachment, ArticleAttachment};
 
@@ -18,4 +18,5 @@ module.exports = {
 	Article,
 	Attachment,
 	ArticleAttachment,
+	Workspace
 };
