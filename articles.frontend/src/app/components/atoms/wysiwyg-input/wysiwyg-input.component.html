@@ -1,0 +1,17 @@
+<div class="wrapper" [ngClass]="state()">
+	@if (label()) {
+	<label class="wrapper__label" for="quill">{{ label() }}</label>
+	}
+
+	<quill-editor
+		class="wrapper__field"
+		id="quill"
+		[theme]="theme()"
+		(onContentChanged)="onContentChanged($event)"
+		(onBlur)="onBlur()"
+	/>
+
+	@if(control()!.errors! && state() !== "default") {
+	<app-control-errors class="wrapper_errors" [errors]="control()!.errors!" />
+	}
+</div>

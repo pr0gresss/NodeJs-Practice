@@ -1,95 +1,123 @@
-const fs = require("fs");
-const path = require("path");
+const {
+	Article,
+	Attachment,
+	ArticleAttachment,
+	sequelize,
+} = require("../db/models/");
 const {BASE_URL} = require("../config/environment");
 
-const DATA_DIR = path.join(__dirname, "../../data");
-
-if (!fs.existsSync(DATA_DIR)) {
-	fs.mkdirSync(DATA_DIR);
-}
-
 class ArticleService {
-	static getAll() {
-		const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith(".json"));
-		return files.map(f => {
-			const data = fs.readFileSync(path.join(DATA_DIR, f), "utf8");
-			return JSON.parse(data);
+	static async getAll() {
+		const articles = await Article.findAll({
+			include: [
+				{
+					model: Attachment,
+					as: "attachments",
+					through: {attributes: []},
+				},
+			],
 		});
+
+		return articles;
 	}
 
-	static getById(id) {
-		const filePath = path.join(DATA_DIR, `${id}.json`);
-		if (!fs.existsSync(filePath)) return null;
+	static async getById(id) {
+		const article = await Article.findByPk(id, {
+			include: [
+				{
+					model: Attachment,
+					as: "attachments",
+					through: {attributes: []},
+				},
+			],
+		});
 
-		const data = fs.readFileSync(filePath, "utf8");
-		return JSON.parse(data);
+		return article || null;
 	}
 
-	static create({title, content, attachments = []}) {
+	static async create({title, content, attachments = []}) {
 		if (!title?.trim() || !content?.trim()) {
 			throw new Error("Title and content are required");
 		}
 
-		const id = Date.now().toString();
-		const newDate = new Date().toISOString();
-		
-		const article = {
-			id,
-			title,
-			content,
-			attachments,
-			createdAt: newDate,
-			updatedAt: newDate,
-		};
+		return await sequelize.transaction(async t => {
+			const article = await Article.create({title, content}, {transaction: t});
 
-		fs.writeFileSync(
-			path.join(DATA_DIR, `${id}.json`),
-			JSON.stringify(article, null, 2)
-		);
-		return article;
+			if (attachments.length) {
+				await ArticleAttachment.bulkCreate(
+					attachments.map(attachment => ({
+						articleId: article.id,
+						attachmentId: attachment.id,
+					})),
+					{transaction: t}
+				);
+			}
+
+			return article;
+		});
 	}
 
-	static update({id, title, content, attachments = []}) {
-		const filePath = path.join(DATA_DIR, `${id}.json`);
-		if (!fs.existsSync(filePath)) return null;
+	static async update({id, title, content, attachments = []}) {
+		const article = await Article.findByPk(id);
+		if (!article) return null;
 
-		const existing = JSON.parse(fs.readFileSync(filePath, "utf8"));
+		return await sequelize.transaction(async t => {
+			await article.update(
+				{
+					title: title?.trim() ?? article.title,
+					content: content?.trim() ?? article.content,
+				},
+				{transaction: t}
+			);
 
-		const updated = {
-			...existing,
-			title: title?.trim() || existing.title,
-			content: content?.trim() || existing.content,
-			attachments: attachments.length ? attachments : existing.attachments,
-			updatedAt: new Date().toISOString(),
-		};
+			if (attachments.length) {
+				await ArticleAttachment.destroy({
+					where: {articleId: id},
+					transaction: t,
+				});
 
-		fs.writeFileSync(filePath, JSON.stringify(updated, null, 2));
-		return updated;
+				await ArticleAttachment.bulkCreate(
+					attachments.map(attachment => ({
+						articleId: id,
+						attachmentId: attachment.id,
+					})),
+					{transaction: t}
+				);
+			}
+
+			return article;
+		});
 	}
 
-	static delete(id) {
-		const filePath = path.join(DATA_DIR, `${id}.json`);
+	static async delete(id) {
+		return sequelize.transaction(async t => {
+			await ArticleAttachment.destroy({
+				where: {articleId: id},
+				transaction: t,
+			});
 
-		if (!fs.existsSync(filePath)) {
-			return false;
-		}
+			const deleted = await Article.destroy({
+				where: {id},
+				transaction: t,
+			});
 
-		fs.unlinkSync(filePath);
-		return true;
+			return deleted > 0;
+		});
 	}
 
-	static uploadAttachment(file) {
+	static async uploadAttachment(file) {
 		if (!file) {
 			throw new Error("No file uploaded");
 		}
 
-		return {
+		const attachment = await Attachment.create({
 			filename: file.filename,
 			url: `${BASE_URL}/uploads/${file.filename}`,
 			mimetype: file.mimetype,
 			size: file.size,
-			uploadedAt: new Date().toISOString(),
-		};
+		});
+
+		return attachment;
 	}
 }
 

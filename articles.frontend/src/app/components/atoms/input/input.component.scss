@@ -60,7 +60,7 @@
 
 .wrapper.error {
 	label {
-		color: var(--danger-main)  !important;
+		color: var(--danger-main) !important;
 	}
 
 	input {
@@ -87,7 +87,7 @@
 }
 
 .wrapper {
-	label {
+	label + input:disabled {
 		color: var(--colors-gray-600) !important;
 		cursor: not-allowed;
 	}

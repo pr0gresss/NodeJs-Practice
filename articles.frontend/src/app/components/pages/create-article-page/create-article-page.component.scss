@@ -18,8 +18,13 @@
     margin-bottom: 20px;
   }
 
+	app-upload-button {
+		max-width: 200px;
+	}
+
   &__attachments {
     display: flex;
+		align-items: center;
     gap: 20px;
   }
 }

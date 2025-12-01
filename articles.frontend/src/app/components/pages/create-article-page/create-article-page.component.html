@@ -8,17 +8,17 @@
 		placeholder="Enter article title"
     icon="letter"
   ></app-input>
-		<quill-editor formControlName="content" theme="snow"></quill-editor>
+		 <app-wysiwyg-input theme="snow" label="Content" formControlName="content"></app-wysiwyg-input>
 		<div class="form__attachments">
 			<app-attachments-block
 				[attachments]="articleForm.controls.attachments.value!"
 			/>
-		</div>
-		<app-upload-button
-			type="file"
+			<app-upload-button
 			(change)="handleFileSelection($event)"
 			accept=".jpg,.jpeg,.png,.gif,.pdf"
 		/>
+		</div>
+		
 		<app-button type="ngSubmit">Post new article</app-button>
 	</form>
 </div>

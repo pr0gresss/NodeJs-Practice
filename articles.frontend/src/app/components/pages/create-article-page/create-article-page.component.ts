@@ -16,17 +16,18 @@ import {AlertService} from "../../../shared/services/alert.service";
 import {ButtonComponent} from "../../atoms/button/button.component";
 import { InputComponent } from "../../atoms/input/input.component";
 import { UploadButtonComponent } from "../../atoms/upload-button/upload-button.component";
+import { WysiwygInputComponent } from "../../atoms/wysiwyg-input/wysiwyg-input.component";
 
 @Component({
 	selector: "app-create-article-page",
 	imports: [
-    QuillModule,
     CommonModule,
     ReactiveFormsModule,
     AttachmentsBlockComponent,
     ButtonComponent,
     InputComponent,
-    UploadButtonComponent
+    UploadButtonComponent,
+		WysiwygInputComponent
 ],
 	templateUrl: "./create-article-page.component.html",
 	styleUrl: "./create-article-page.component.scss",
@@ -73,7 +74,6 @@ export class CreateArticlePageComponent {
 				input.value = "";
 			},
 			error: err => {
-				console.log(JSON.stringify(err.error));
 				this._alertService.show({
 					message: err.error.error,
 					type: "error",
@@ -88,6 +88,7 @@ export class CreateArticlePageComponent {
 		if (!this.articleForm.valid) return;
 
 		const newArticle = this.articleForm.value as IArticle;
+		console.log(newArticle)
 
 		this._articleService.postArticle(newArticle).subscribe({
 			next: res => {

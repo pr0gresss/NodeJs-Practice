@@ -18,9 +18,9 @@ import {IconComponent, TIcon} from "../icon/icon.component";
 import {ControlErrorsComponent} from "../control-errors/control-errors.component";
 import {NgTemplateOutlet, NgClass} from "@angular/common";
 
-type TInputState = "default" | "error" | "success";
+export type TInputState = "default" | "error" | "success";
 
-type TInputType = "text" | "email" | "password" | "number";
+export type TInputType = "text" | "email" | "password" | "number";
 
 @Component({
 	selector: "app-input",
@@ -63,10 +63,9 @@ export class InputComponent implements OnInit {
     c!.valueChanges.subscribe(() => this.updateState());
 	}
 
-	updateState() {
+	private updateState() {
 		const c = this.control();
 
-		console.log(this.control()?.errors)
 		if (!c) return this.state.set("default");
 
 		if (c.invalid && c.touched) return this.state.set("error");
@@ -94,7 +93,7 @@ export class InputComponent implements OnInit {
 	public setDisabledState(isDisabled: boolean) {
 	}
 
-	handleInput(event: any) {
+	public handleInput(event: any) {
 		this.control()?.markAsTouched()
 		const v = event.target.value;
 		this.value = v;
