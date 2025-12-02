@@ -51,8 +51,6 @@ npm run start
 ```
 
 
-The backend will start on 3000 port.
-
 ## 💻 Frontend Setup
 ### 🔧 Install Dependencies
 ```bash
