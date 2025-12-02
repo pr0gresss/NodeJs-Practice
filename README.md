@@ -15,9 +15,19 @@ cd articles.backend
 npm install
 ```
 
-### 🔧 Run db migration
+### 🔧 Create db
+```bash
+npm run db:create
+```
+
+### 🔧 Run db migrations
 ```bash
 npm run db:migrate
+```
+
+### 🔧 Run db seeders
+```bash
+npm run db:seed
 ```
 
 ### 🔧 .env file example

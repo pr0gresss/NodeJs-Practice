@@ -8,8 +8,8 @@ import {ArticleCardComponent} from "../../organisms/article-card/article-card.co
 import {SelectComponent} from "../../atoms/select/select.component";
 import {WorkspaceService} from "../../../shared/services/workspace.service";
 import {IWorkspace} from "../../../shared/entities/IWorkspace";
-import {Subject, takeUntil} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import { ButtonComponent } from "../../atoms/button/button.component";
 
 @Component({
 	standalone: true,
@@ -20,6 +20,7 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 		ReactiveFormsModule,
 		ArticleCardComponent,
 		SelectComponent,
+		ButtonComponent
 	],
 	templateUrl: "./workspace-articles-page.component.html",
 	styleUrl: "./workspace-articles-page.component.scss",

@@ -1,8 +1,17 @@
 <div class="container">
 	<form action="workspace__form" [formGroup]="workspaceForm">
-		<app-select [options]="workspaces()!" displayField="name" valueField="id" formControlName="workspace"></app-select>
+		<app-select label="Select workspace" [options]="workspaces()!" displayField="name" valueField="id" formControlName="workspace"></app-select>
 	</form>
   @for(article of articles(); track article.id) {
   <app-article-card [article]="article"></app-article-card>
   }
+
+	@if(articles()?.length === 0) {
+		<div class="empty">
+			<div class="empty__content">
+				<h2>There are no articles yet.</h2>
+				<app-button icon="plus" size="small">Create article</app-button>
+			</div>
+		</div>
+	}
 </div>
