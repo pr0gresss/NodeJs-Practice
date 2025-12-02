@@ -10,18 +10,20 @@ import {WorkspaceService} from "../../../shared/services/workspace.service";
 import {IWorkspace} from "../../../shared/entities/IWorkspace";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import { ButtonComponent } from "../../atoms/button/button.component";
+import { RouterLink } from "@angular/router";
 
 @Component({
 	standalone: true,
 	selector: "app-workspace-articles-page",
 	imports: [
-		QuillModule,
-		CommonModule,
-		ReactiveFormsModule,
-		ArticleCardComponent,
-		SelectComponent,
-		ButtonComponent
-	],
+    QuillModule,
+    CommonModule,
+    ReactiveFormsModule,
+    ArticleCardComponent,
+    SelectComponent,
+    ButtonComponent,
+    RouterLink
+],
 	templateUrl: "./workspace-articles-page.component.html",
 	styleUrl: "./workspace-articles-page.component.scss",
 })
