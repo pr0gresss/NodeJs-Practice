@@ -25,8 +25,9 @@ import {AlertService} from "../../../shared/services/alert.service";
 import {ButtonComponent} from "../../atoms/button/button.component";
 import {UploadButtonComponent} from "../../atoms/upload-button/upload-button.component";
 import {InputComponent} from "../../atoms/input/input.component";
-import { WysiwygInputComponent } from "../../atoms/wysiwyg-input/wysiwyg-input.component";
-import { CommentsFormComponent } from "../../organisms/comments-form/comments-form.component";
+import {WysiwygInputComponent} from "../../atoms/wysiwyg-input/wysiwyg-input.component";
+import {CommentsFormComponent} from "../../organisms/comments-form/comments-form.component";
+import { IVersion } from "../../../shared/entities/IVersion";
 
 enum EArticleMode {
 	PREVIEW,
@@ -36,14 +37,14 @@ enum EArticleMode {
 @Component({
 	selector: "app-article-page",
 	imports: [
-    ButtonComponent,
-    ReactiveFormsModule,
-    AttachmentsBlockComponent,
-    UploadButtonComponent,
-    InputComponent,
-    WysiwygInputComponent,
-		CommentsFormComponent
-],
+		ButtonComponent,
+		ReactiveFormsModule,
+		AttachmentsBlockComponent,
+		UploadButtonComponent,
+		InputComponent,
+		WysiwygInputComponent,
+		CommentsFormComponent,
+	],
 	templateUrl: "./article-page.component.html",
 	styleUrl: "./article-page.component.scss",
 })
@@ -56,8 +57,8 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	private _alertService = inject(AlertService);
 
 	protected readonly MODE = EArticleMode;
-	protected articleForm = new FormGroup({
-		id: new FormControl<string | null>(null),
+	protected versionForm = new FormGroup({
+		articleId: new FormControl<string | null>(null),
 		title: new FormControl<string>("", [
 			Validators.required,
 			Validators.maxLength(40),
@@ -72,11 +73,10 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 
 	public articleId = input.required<string>();
 	public currentMode = EArticleMode.PREVIEW;
-	public savedArticleForm: IArticle | null = null;
+	public savedVersionForm: IVersion | null = null;
 
 	public ngOnInit(): void {
-		this.articleForm.controls.id.setValue(this.articleId());
-
+		this.versionForm.controls.articleId.setValue(this.articleId());
 		if (this.articleId()) {
 			this._socketService.joinRoom(this.articleId()!);
 
@@ -84,7 +84,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 				.listen<IArticle>("articleUpdated")
 				.pipe(takeUntilDestroyed(this._destroyRef))
 				.subscribe(update => {
-					this.articleForm.patchValue(update);
+					this.versionForm.patchValue(update.versions[0]);
 					this._alertService.show({
 						message: "This article was updated!",
 						type: "info",
@@ -96,7 +96,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 				.pipe(takeUntilDestroyed(this._destroyRef))
 				.subscribe({
 					next: data => {
-						this.articleForm.patchValue(data);
+						this.versionForm.patchValue(data.versions[0]);
 					},
 				});
 		}
@@ -107,12 +107,12 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	}
 
 	get safeHtml(): SafeHtml {
-		if (!this.articleForm.controls.content.value) {
+		if (!this.versionForm.controls.content.value) {
 			return "";
 		}
 
 		return this._sanitizer.bypassSecurityTrustHtml(
-			this.articleForm.controls.content.value.replace(
+			this.versionForm.controls.content.value.replace(
 				/<(h1|h2|h3|li|ul|ol|p)><\/\1>/g,
 				"<p><br></p>"
 			)
@@ -122,25 +122,27 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	public toggleMode() {
 		if (this.currentMode == EArticleMode.PREVIEW) {
 			this.currentMode = EArticleMode.EDIT;
+			console.log(this.versionForm.value)
 
-			this.savedArticleForm = structuredClone(
-				this.articleForm.value as IArticle
+			this.savedVersionForm = structuredClone(
+				this.versionForm.value as IVersion
 			);
+			console.log(this.savedVersionForm)
 		} else {
 			this.currentMode = EArticleMode.PREVIEW;
-			this.articleForm.markAsUntouched();
 
-			if (this.savedArticleForm) {
-				this.articleForm.patchValue(this.savedArticleForm);
+			if (this.savedVersionForm) {
+				this.versionForm.patchValue(this.savedVersionForm);
 			}
+			this.versionForm.markAsUntouched();
 		}
 	}
 
 	public saveArticle() {
-		if (!this.articleForm.valid) return;
+		if (!this.versionForm.valid) return;
 
 		this._articleService
-			.updateArticle(this.articleForm.value as IArticle)
+			.updateArticle(this.versionForm.value as IArticle)
 			.subscribe({
 				next: () => {
 					this._alertService.show({
@@ -158,6 +160,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 				},
 			});
 		this.currentMode = this.MODE.PREVIEW;
+		this.versionForm.markAsUntouched();
 	}
 
 	public deleteArticle() {
@@ -168,7 +171,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 					type: "success",
 					timeout: 5000,
 				});
-				this._router.navigate(["/"]);
+				this._router.navigate(["/articles"]);
 			},
 			error: err => {
 				this._alertService.show({
@@ -188,8 +191,8 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 
 		this._articleService.uploadAttachment(file).subscribe({
 			next: attachment => {
-				const current = this.articleForm.controls.attachments.value || [];
-				this.articleForm.controls.attachments.setValue([
+				const current = this.versionForm.controls.attachments.value || [];
+				this.versionForm.controls.attachments.setValue([
 					...current,
 					attachment,
 				]);
@@ -198,7 +201,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 					type: "success",
 					timeout: 5000,
 				});
-				this.articleForm.markAsTouched()
+				this.versionForm.markAsTouched();
 				input.value = "";
 			},
 			error: err => {

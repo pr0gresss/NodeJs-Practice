@@ -92,7 +92,6 @@ export class WysiwygInputComponent implements OnInit, ControlValueAccessor {
   public onContentChanged(event: any) {
 		this.control()?.markAsTouched();
     this.onChange(event.html);
-
   }
 
   public onBlur() {

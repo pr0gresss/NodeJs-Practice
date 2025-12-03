@@ -24,6 +24,20 @@ export const routes: Routes = [
 			{
 				path: ":articleId",
 				component: ArticlePageComponent,
+				children: [
+					{
+						path: "versions",
+						// TODO: Implement new page (ArticleVersionsPage)
+						component: HomePageComponent,
+						children: [
+							{
+								path: ":versionId",
+								// TODO: Implement new page (ArticleVersionPage)
+								component: HomePageComponent,
+							},
+						],
+					},
+				],
 			},
 		],
 	},

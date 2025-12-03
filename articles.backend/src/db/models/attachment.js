@@ -3,11 +3,11 @@ const {Model} = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class Attachment extends Model {
 		static associate(models) {
-			this.belongsToMany(models.Article, {
-				as: "articles",
-				through: models.ArticleAttachment,
+			this.belongsToMany(models.Version, {
+				as: "versions",
+				through: models.VersionAttachment,
 				foreignKey: "attachmentId",
-				otherKey: "articleId",
+				otherKey: "versionId",
 			});
 		}
 	}

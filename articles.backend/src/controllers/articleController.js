@@ -4,37 +4,75 @@ const upload = require("../middleware/upload");
 
 /**
  * @swagger
+ * tags:
+ *   name: Articles
+ *   description: Article management
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Attachment:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         filename:
+ *           type: string
+ *         url:
+ *           type: string
+ *         mimetype:
+ *           type: string
+ *         size:
+ *           type: number
+ *         uploadedAt:
+ *           type: string
+ *
+ *     Version:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         title:
+ *           type: string
+ *         content:
+ *           type: string
+ *         isLatest:
+ *           type: boolean
+ *         attachments:
+ *           type: array
+ *           items:
+ *             $ref: "#/components/schemas/Attachment"
+ *
+ *     Article:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         workspaceId:
+ *           type: string
+ *         versions:
+ *           type: array
+ *           items:
+ *             $ref: "#/components/schemas/Version"
+ */
+
+/**
+ * @swagger
  * /articles:
  *   get:
  *     summary: Get all articles
  *     tags: [Articles]
  *     responses:
  *       200:
- *         description: A list of all articles
+ *         description: List of articles
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   title:
- *                     type: string
- *                   content:
- *                     type: string
- *                   attachments:
- *                     type: array
- *                     items:
- *                       type: object
- *                       properties:
- *                         filename:
- *                           type: string
- *                         url:
- *                           type: string
- *                         uploadedAt:
- *                           type: string
+ *                 $ref: "#/components/schemas/Article"
  */
 exports.getAll = async (req, res) => {
 	const articles = await ArticleService.getAll();
@@ -53,10 +91,13 @@ exports.getAll = async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *         description: The article ID
  *     responses:
  *       200:
  *         description: Article found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Article"
  *       404:
  *         description: Article not found
  */
@@ -78,12 +119,15 @@ exports.getById = async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *         description: The workspace ID
  *     responses:
  *       200:
- *         description: Successfully retrieved articles
- *       404:
- *         description: Workspace not found
+ *         description: Articles for that workspace
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: "#/components/schemas/Article"
  */
 exports.getByWorkspaceId = async (req, res) => {
 	try {
@@ -101,7 +145,7 @@ exports.getByWorkspaceId = async (req, res) => {
  * @swagger
  * /articles:
  *   post:
- *     summary: Create a new article
+ *     summary: Create a new article + latest version
  *     tags: [Articles]
  *     requestBody:
  *       required: true
@@ -112,25 +156,21 @@ exports.getByWorkspaceId = async (req, res) => {
  *             required:
  *               - title
  *               - content
+ *               - workspaceId
  *             properties:
  *               title:
  *                 type: string
- *                 example: "My first article"
  *               content:
  *                 type: string
- *                 example: "<p>This is HTML content</p>"
+ *               workspaceId:
+ *                 type: string
  *               attachments:
  *                 type: array
  *                 items:
- *                   type: object
- *                   properties:
- *                     filename:
- *                       type: string
- *                     url:
- *                       type: string
+ *                   $ref: "#/components/schemas/Attachment"
  *     responses:
  *       201:
- *         description: Article created successfully
+ *         description: Article created
  *       400:
  *         description: Invalid request
  */
@@ -155,9 +195,8 @@ exports.create = async (req, res) => {
  * @swagger
  * /articles:
  *   put:
- *     summary: Update an existing article
+ *     summary: Update article (creates a new version)
  *     tags: [Articles]
- *     description: Update article details and attachments.
  *     requestBody:
  *       required: true
  *       content:
@@ -166,28 +205,24 @@ exports.create = async (req, res) => {
  *             type: object
  *             required:
  *               - id
+ *               - title
+ *               - content
  *             properties:
  *               id:
  *                 type: string
- *                 example: "1730505050000"
  *               title:
  *                 type: string
- *                 example: "Updated Title"
  *               content:
  *                 type: string
- *                 example: "<p>Updated HTML content</p>"
  *               attachments:
  *                 type: array
  *                 items:
- *                   type: object
- *                   properties:
- *                     filename:
- *                       type: string
- *                     url:
- *                       type: string
+ *                   $ref: "#/components/schemas/Attachment"
+ *               authorId:
+ *                 type: string
  *     responses:
  *       200:
- *         description: Article updated successfully
+ *         description: Updated article
  *       400:
  *         description: Invalid input
  *       404:
@@ -195,10 +230,10 @@ exports.create = async (req, res) => {
  */
 exports.update = async (req, res) => {
 	try {
-		const {id, title, content, attachments = [], authorId} = req.body;
+		const {articleId, title, content, attachments = [], authorId} = req.body;
 
 		const updated = await ArticleService.update({
-			id,
+			articleId,
 			title,
 			content,
 			attachments,
@@ -207,7 +242,7 @@ exports.update = async (req, res) => {
 		if (!updated) return res.status(404).json({error: "Article not found"});
 
 		SocketService.broadcastToRoomExceptAuthor(
-			updated.id,
+			updated.articleId,
 			"articleUpdated",
 			updated,
 			authorId
@@ -231,10 +266,9 @@ exports.update = async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the article to delete
  *     responses:
  *       200:
- *         description: Article deleted successfully
+ *         description: Article deleted
  *       404:
  *         description: Article not found
  */
@@ -258,7 +292,6 @@ exports.delete = async (req, res) => {
  *   post:
  *     summary: Upload an attachment file
  *     tags: [Articles]
- *     description: Uploads a single file and returns attachment metadata.
  *     requestBody:
  *       required: true
  *       content:
@@ -271,24 +304,13 @@ exports.delete = async (req, res) => {
  *                 format: binary
  *     responses:
  *       200:
- *         description: File uploaded successfully
+ *         description: Uploaded attachment metadata
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 filename:
- *                   type: string
- *                 url:
- *                   type: string
- *                 mimetype:
- *                   type: string
- *                 size:
- *                   type: number
- *                 uploadedAt:
- *                   type: string
+ *               $ref: "#/components/schemas/Attachment"
  *       400:
- *         description: No file provided or invalid request
+ *         description: No file or invalid request
  *       406:
  *         description: Invalid file type
  */
