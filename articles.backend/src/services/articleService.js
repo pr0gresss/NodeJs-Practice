@@ -35,13 +35,31 @@ class ArticleService {
 		return article || null;
 	}
 
-	static async create({title, content, attachments = []}) {
+	static async getByWorkspaceId(workspaceId) {
+		const articles = await Article.findAll({
+			where: {workspaceId},
+			include: [
+				{
+					model: Attachment,
+					as: "attachments",
+					through: {attributes: []},
+				},
+			],
+		});
+
+		return articles || null;
+	}
+
+	static async create({title, content, attachments = [], workspaceId}) {
 		if (!title?.trim() || !content?.trim()) {
 			throw new Error("Title and content are required");
 		}
 
 		return await sequelize.transaction(async t => {
-			const article = await Article.create({title, content}, {transaction: t});
+			const article = await Article.create(
+				{title, workspaceId, content},
+				{transaction: t}
+			);
 
 			if (attachments.length) {
 				await ArticleAttachment.bulkCreate(

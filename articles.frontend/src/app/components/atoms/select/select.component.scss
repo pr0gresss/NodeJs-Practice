@@ -1,0 +1,53 @@
+:host {
+	width: 100%;
+	display: block;
+}
+
+.wrapper {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 4px;
+}
+
+select {
+	border: none;
+	outline: none;
+	appearance: none;
+	font-size: 14px;
+	line-height: 20px;
+	padding: 6px 12px;
+	border-radius: 4px;
+	transition: 0.2s ease-in-out;
+	position: relative;
+	width: 100%;
+
+	background-color: var(--colors-white);
+	outline: 1px var(--colors-gray-400) solid;
+	color: var(--colors-gray-900);
+
+	&:hover {
+		cursor: pointer;
+		outline: 1px var(--primary-hover) solid;
+	}
+
+	&:focus {
+		outline: 3px var(--primary-focus) solid;
+	}
+
+	:empty {
+		color: var(--colors-gray-700);
+	}
+
+	&:disabled {
+		outline: none !important;
+		cursor: not-allowed;
+		color: var(--colors-gray-500) !important;
+		background-color: var(--colors-gray-300) !important;
+	}
+}
+
+option {
+	border: none;
+	outline: none;
+	border-radius: 10px;
+}

@@ -1,5 +1,4 @@
 const sequelize = require("./sequelize");
-require("./models/Article");
 
 sequelize
 	.sync({alter: false})

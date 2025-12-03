@@ -25,8 +25,8 @@ import {AlertService} from "../../../shared/services/alert.service";
 import {ButtonComponent} from "../../atoms/button/button.component";
 import {UploadButtonComponent} from "../../atoms/upload-button/upload-button.component";
 import {InputComponent} from "../../atoms/input/input.component";
-import { ControlErrorsComponent } from "../../atoms/control-errors/control-errors.component";
 import { WysiwygInputComponent } from "../../atoms/wysiwyg-input/wysiwyg-input.component";
+import { CommentsFormComponent } from "../../organisms/comments-form/comments-form.component";
 
 enum EArticleMode {
 	PREVIEW,
@@ -41,8 +41,8 @@ enum EArticleMode {
     AttachmentsBlockComponent,
     UploadButtonComponent,
     InputComponent,
-    ControlErrorsComponent,
-    WysiwygInputComponent
+    WysiwygInputComponent,
+		CommentsFormComponent
 ],
 	templateUrl: "./article-page.component.html",
 	styleUrl: "./article-page.component.scss",

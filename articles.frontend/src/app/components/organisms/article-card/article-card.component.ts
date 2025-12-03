@@ -14,6 +14,6 @@ export class ArticleCardComponent {
   public article = input<IArticle | null>(null);
 
   public goToArticle() {
-    this._router.navigate(["article", this.article()!.id])
+    this._router.navigate(["articles", this.article()!.id])
   }
 }

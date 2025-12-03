@@ -47,4 +47,9 @@
 		<div class="container__content__inner" [innerHTML]="safeHtml"></div>
 		}
 	</div>
+	@if (currentMode == MODE.PREVIEW) {
+		<div class="container__comments">
+			<app-comments-form [articleId]="articleId()"></app-comments-form>
+		</div>
+	}
 </form>

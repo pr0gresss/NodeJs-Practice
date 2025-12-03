@@ -1,0 +1,8 @@
+<h3>Comments ({{comments()?.length}})</h3>
+<form class="comment__form" [formGroup]="commentForm" (ngSubmit)="handlePostComment()">
+	<app-input placeholder="Enter comment" label="Message" formControlName="content"/>
+	<app-button size="small" type="ngSubmit">Post comment</app-button>
+</form>
+@if (comments()) {
+	<app-comment-list [comments]="comments()!"/>
+}

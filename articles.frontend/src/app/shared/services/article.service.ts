@@ -20,6 +20,10 @@ export class ArticleService {
 		return this._baseService.get(`articles/${articleId}`);
 	}
 
+	public getArticlesByWorkspaceId(workspaceId: string): Observable<IArticle[]> {
+		return this._baseService.get(`articles/workspace/${workspaceId}`);
+	}
+
 	public postArticle(article: IArticle): Observable<IArticle> {
 		return this._baseService.post("articles", article);
 	}

@@ -15,14 +15,24 @@ cd articles.backend
 npm install
 ```
 
-### 🔧 Run db migration
+### 🔧 Create db
+```bash
+npm run db:create
+```
+
+### 🔧 Run db migrations
 ```bash
 npm run db:migrate
 ```
 
+### 🔧 Run db seeders
+```bash
+npm run db:seed
+```
+
 ### 🔧 .env file example
 ```bash
-DB_HOST="DB_HOST"
+DB_HOST="localhost"
 DB_PORT=DB_PORT
 DB_USER="DB_USER"
 DB_PASSWORD="DB_PASSWORD"
@@ -30,8 +40,8 @@ DB_NAME="DB_NAME"
 DB_SSL="true"
 SWAGGER_ENDPOINT="docs"
 BASE_PORT=BASE_PORT
-BASE_HOST="BACKEND_HOST"
-FRONTEND_HOST="FRONTEND_HOST"
+BASE_HOST="http://localhost"
+FRONTEND_HOST="http://localhost"
 FRONTEND_PORT=FRONTEND_PORT
 ```
 
@@ -40,8 +50,6 @@ FRONTEND_PORT=FRONTEND_PORT
 npm run start
 ```
 
-
-The backend will start on 3000 port.
 
 ## 💻 Frontend Setup
 ### 🔧 Install Dependencies
