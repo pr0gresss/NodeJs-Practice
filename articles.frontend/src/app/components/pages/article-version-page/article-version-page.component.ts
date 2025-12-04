@@ -20,7 +20,7 @@ export class ArticleVersionPageComponent implements OnInit {
 	public ngOnInit(): void {
 		this._versionService.getVersionById(this.versionId()).subscribe({
 			next: version => {
-				// this.version.set(version);
+				this.version.set(version);
 			},
 			error: err => {
 				this._alertService.show({
