@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	Component,
 	computed,
 	forwardRef,
@@ -11,9 +12,14 @@ import {
 } from "@angular/core";
 import {QuillEditorComponent} from "ngx-quill";
 import {ControlErrorsComponent} from "../control-errors/control-errors.component";
-import { ControlContainer, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
+import {
+	ControlContainer,
+	ControlValueAccessor,
+	FormControl,
+	NG_VALUE_ACCESSOR,
+} from "@angular/forms";
 import {TInputState} from "../input/input.component";
-import { NgClass } from "@angular/common";
+import {NgClass} from "@angular/common";
 
 @Component({
 	selector: "app-wysiwyg-input",
@@ -28,17 +34,20 @@ import { NgClass } from "@angular/common";
 		},
 	],
 })
-export class WysiwygInputComponent implements OnInit, ControlValueAccessor {
+export class WysiwygInputComponent
+	implements OnInit, ControlValueAccessor, AfterViewInit
+{
 	public theme = input<"snow">("snow");
 	public label = input<string>("");
+	public disabled = input<boolean>(false);
 	public formControlName = input<string>("");
 	public state = signal<TInputState>("default");
 
-	@ViewChild(QuillEditorComponent)
-  private quill!: QuillEditorComponent;
-
 	private onChange: (val: any) => void = () => {};
-  private onTouched: () => void = () => {};
+	private onTouched: () => void = () => {};
+
+	@ViewChild("quill", {static: false})
+	quill!: QuillEditorComponent;
 
 	constructor(
 		@Optional() @SkipSelf() private controlContainer: ControlContainer
@@ -46,9 +55,15 @@ export class WysiwygInputComponent implements OnInit, ControlValueAccessor {
 
 	public ngOnInit(): void {
 		const c = this.control();
+		c?.statusChanges.subscribe(() => this.updateState());
+		c?.valueChanges.subscribe(() => this.updateState());
+	}
 
-		c!.statusChanges.subscribe(() => this.updateState());
-		c!.valueChanges.subscribe(() => this.updateState());
+	public ngAfterViewInit(): void {
+		this.quill.writeValue(this.control()?.value);
+
+		this.control()?.markAsPristine();
+		this.control()?.markAsUntouched();
 	}
 
 	public control = computed(() => {
@@ -59,42 +74,32 @@ export class WysiwygInputComponent implements OnInit, ControlValueAccessor {
 
 	private updateState() {
 		const c = this.control();
-
 		if (!c) return this.state.set("default");
-
 		if (c.invalid && c.touched) return this.state.set("error");
-
 		if (c.valid && c.touched) return this.state.set("success");
-
 		return this.state.set("default");
 	}
 
-	  writeValue(value: any): void {
-    if (this.quill && value != null) {
-      this.quill.writeValue(value);
-    }
-  }
+	public writeValue(value: any): void {}
 
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
+	public registerOnChange(fn: any): void {
+		this.onChange = fn;
+	}
 
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
+	public registerOnTouched(fn: any): void {
+		this.onTouched = fn;
+	}
 
-  setDisabledState(isDisabled: boolean): void {
-    if (this.quill) {
-      this.quill.setDisabledState(isDisabled);
-    }
-  }
+	public setDisabledState(isDisabled: boolean): void {}
 
-  public onContentChanged(event: any) {
+	public onContentChanged(event: any) {
 		this.control()?.markAsTouched();
-    this.onChange(event.html);
-  }
 
-  public onBlur() {
-    this.onTouched();
-  }
+		this.onChange(event.html);
+	}
+
+	public onBlur() {
+
+		this.onTouched();
+	}
 }

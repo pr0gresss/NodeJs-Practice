@@ -21,6 +21,9 @@
 			</app-button>
 			<app-button icon="cancel" variant="outline" (click)="deleteArticle()">Delete article</app-button>
 			}
+			@if(currentMode == MODE.PREVIEW) {
+				<app-button icon="eye" variant="outline" size="medium" routerLink="versions">View other versions</app-button>
+			}
 			<app-button icon="edit" (click)="toggleMode()">Edit</app-button>
 		</div>
 	</div>

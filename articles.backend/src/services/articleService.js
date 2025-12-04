@@ -9,6 +9,7 @@ class ArticleService {
 				{
 					model: Version,
 					as: "versions",
+					where: {isLatest: true},
 					required: false,
 					include: [
 						{
@@ -31,6 +32,7 @@ class ArticleService {
 					model: Version,
 					as: "versions",
 					required: false,
+					where: {isLatest: true},
 					include: [
 						{
 							model: Attachment,
@@ -92,6 +94,7 @@ class ArticleService {
 					{
 						model: Version,
 						as: "versions",
+						where: {isLatest: true},
 						required: false,
 						include: [
 							{
@@ -107,7 +110,7 @@ class ArticleService {
 	}
 
 	static async update({articleId, title, content, attachments = []}) {
-		const article = await Article.findByPk(id);
+		const article = await Article.findByPk(articleId);
 		if (!article) return null;
 
 		return await VersionService.create({

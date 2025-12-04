@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {IArticle} from "../entities/IArticle";
 import {IAttachment} from "../entities/IAttachment";
 import {SocketService} from "./ws.service";
+import { IVersion } from "../entities/IVersion";
 
 @Injectable({
 	providedIn: "root",
@@ -28,11 +29,11 @@ export class ArticleService {
 		return this._baseService.post("articles", article);
 	}
 
-	public updateArticle(article: IArticle) {
+	public updateArticle(version: IVersion) {
 		const authorId = this._socketService.socket.id;
 
 		const payload = {
-			...article,
+			...version,
 			authorId,
 		};
 		return this._baseService.put("articles", payload);

@@ -5,11 +5,12 @@ import {
 	input,
 	OnDestroy,
 	OnInit,
+	signal,
 } from "@angular/core";
 import {QuillModule} from "ngx-quill";
 import {IArticle} from "../../../shared/entities/IArticle";
 import {ArticleService} from "../../../shared/services/article.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {
 	FormControl,
 	FormGroup,
@@ -27,7 +28,8 @@ import {UploadButtonComponent} from "../../atoms/upload-button/upload-button.com
 import {InputComponent} from "../../atoms/input/input.component";
 import {WysiwygInputComponent} from "../../atoms/wysiwyg-input/wysiwyg-input.component";
 import {CommentsFormComponent} from "../../organisms/comments-form/comments-form.component";
-import { IVersion } from "../../../shared/entities/IVersion";
+import {IVersion} from "../../../shared/entities/IVersion";
+import { IconComponent } from "../../atoms/icon/icon.component";
 
 enum EArticleMode {
 	PREVIEW,
@@ -37,14 +39,16 @@ enum EArticleMode {
 @Component({
 	selector: "app-article-page",
 	imports: [
-		ButtonComponent,
-		ReactiveFormsModule,
-		AttachmentsBlockComponent,
-		UploadButtonComponent,
-		InputComponent,
-		WysiwygInputComponent,
-		CommentsFormComponent,
-	],
+    ButtonComponent,
+    ReactiveFormsModule,
+    AttachmentsBlockComponent,
+    UploadButtonComponent,
+    InputComponent,
+    WysiwygInputComponent,
+    CommentsFormComponent,
+    IconComponent,
+		RouterLink
+],
 	templateUrl: "./article-page.component.html",
 	styleUrl: "./article-page.component.scss",
 })
@@ -77,33 +81,32 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 
 	public ngOnInit(): void {
 		this.versionForm.controls.articleId.setValue(this.articleId());
-		if (this.articleId()) {
-			this._socketService.joinRoom(this.articleId()!);
 
-			this._socketService
-				.listen<IArticle>("articleUpdated")
-				.pipe(takeUntilDestroyed(this._destroyRef))
-				.subscribe(update => {
-					this.versionForm.patchValue(update.versions[0]);
-					this._alertService.show({
-						message: "This article was updated!",
-						type: "info",
-						timeout: 5000,
-					});
+		this._socketService.joinRoom(this.articleId());
+
+		this._socketService
+			.listen<IVersion>("articleUpdated")
+			.pipe(takeUntilDestroyed(this._destroyRef))
+			.subscribe((newVersion: IVersion) => {
+				this.versionForm.patchValue(newVersion);
+				this._alertService.show({
+					message: "This article was updated!",
+					type: "info",
+					timeout: 5000,
 				});
-			this._articleService
-				.getArticleById(this.articleId()!)
-				.pipe(takeUntilDestroyed(this._destroyRef))
-				.subscribe({
-					next: data => {
-						this.versionForm.patchValue(data.versions[0]);
-					},
-				});
-		}
+			});
+		this._articleService
+			.getArticleById(this.articleId())
+			.pipe(takeUntilDestroyed(this._destroyRef))
+			.subscribe({
+				next: data => {
+					this.versionForm.patchValue(data.versions[0]);
+				},
+			});
 	}
 
 	public ngOnDestroy() {
-		this._socketService.leaveRoom(this.articleId()!);
+		this._socketService.leaveRoom(this.articleId());
 	}
 
 	get safeHtml(): SafeHtml {
@@ -122,19 +125,16 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	public toggleMode() {
 		if (this.currentMode == EArticleMode.PREVIEW) {
 			this.currentMode = EArticleMode.EDIT;
-			console.log(this.versionForm.value)
 
 			this.savedVersionForm = structuredClone(
 				this.versionForm.value as IVersion
 			);
-			console.log(this.savedVersionForm)
 		} else {
 			this.currentMode = EArticleMode.PREVIEW;
 
 			if (this.savedVersionForm) {
 				this.versionForm.patchValue(this.savedVersionForm);
 			}
-			this.versionForm.markAsUntouched();
 		}
 	}
 
@@ -142,7 +142,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 		if (!this.versionForm.valid) return;
 
 		this._articleService
-			.updateArticle(this.versionForm.value as IArticle)
+			.updateArticle(this.versionForm.value as IVersion)
 			.subscribe({
 				next: () => {
 					this._alertService.show({
@@ -164,7 +164,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	}
 
 	public deleteArticle() {
-		this._articleService.deleteArticle(this.articleId()!).subscribe({
+		this._articleService.deleteArticle(this.articleId()).subscribe({
 			next: () => {
 				this._alertService.show({
 					message: "Article was deleted!",
