@@ -3,11 +3,10 @@ const {Model} = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class Article extends Model {
 		static associate(models) {
-			this.belongsToMany(models.Attachment, {
-				as: "attachments",
-				through: models.ArticleAttachment,
+			this.hasMany(models.Version, {
+				as: "versions",
 				foreignKey: "articleId",
-				otherKey: "attachmentId",
+				onDelete: "CASCADE",
 			});
 			this.belongsTo(models.Workspace, {
 				foreignKey: "workspaceId",
@@ -28,8 +27,6 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				defaultValue: DataTypes.UUIDV4,
 			},
-			title: DataTypes.STRING,
-			content: DataTypes.STRING,
 			workspaceId: {
 				allowNull: false,
 				type: DataTypes.UUID,

@@ -1,4 +1,4 @@
-<form class="container" [formGroup]="articleForm">
+<form class="container" [formGroup]="versionForm">
 	<div class="container__header">
 		@if(currentMode == MODE.EDIT) {
 		<app-input
@@ -10,23 +10,26 @@
 		/>
 		} @if(currentMode == MODE.PREVIEW) {
 		<h1 class="container__header__title">
-			{{ articleForm.controls.title.value }}
+			{{ versionForm.controls.title.value }}
 		</h1>
 		}
 
 		<div class="container__header__actions">
 			@if(currentMode == MODE.EDIT) {
-			<app-button icon="file" variant="outline" (click)="saveArticle()" [disabled]="articleForm.untouched">
+			<app-button icon="file" variant="outline" (click)="saveArticle()" [disabled]="versionForm.untouched">
 				Save Changes
 			</app-button>
 			<app-button icon="cancel" variant="outline" (click)="deleteArticle()">Delete article</app-button>
+			}
+			@if(currentMode == MODE.PREVIEW) {
+				<app-button icon="eye" variant="outline" size="medium" routerLink="versions">View other versions</app-button>
 			}
 			<app-button icon="edit" (click)="toggleMode()">Edit</app-button>
 		</div>
 	</div>
 	<div class="container__attachments">
 		<app-attachments-block
-			[attachments]="articleForm.controls.attachments.value!"
+			[attachments]="versionForm.controls.attachments.value!"
 		/>
 
 		@if(currentMode == MODE.EDIT) {

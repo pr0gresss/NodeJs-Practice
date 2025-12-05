@@ -14,7 +14,6 @@ export class CommentService {
 	}
 
 	public postComment(articleId:string, comment: IComment): Observable<IComment> {
-		console.log("posy")
 		return this._baseService.post("comments", {articleId, ...comment});
 	}
 

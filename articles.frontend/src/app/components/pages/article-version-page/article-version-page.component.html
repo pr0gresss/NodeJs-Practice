@@ -1,0 +1,26 @@
+<div class="container">
+	@if(version() !== null) {
+		<h3 class="container__title">This page is readonly.</h3>
+	<div class="container__header">
+		<h1 class="container__header__title">
+			{{ version()!.title }}
+		</h1>
+	</div>
+	<div class="container__attachments">
+		<app-attachments-block [attachments]="version()!.attachments" />
+	</div>
+	<div class="container__content">
+		<div
+			class="container__content__inner"
+			[innerHTML]="version()!.content"
+		></div>
+	</div>
+	} @else {
+		<div class="empty">
+			<div class="empty__text">
+				<h2>Something went wrong...</h2>
+				<p>Cant find this version.</p>
+			</div>
+		</div>
+	}
+</div>

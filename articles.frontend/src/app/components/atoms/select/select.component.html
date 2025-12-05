@@ -1,4 +1,4 @@
-@if(options().length !== 0) {
+@if(options() && options().length !== 0) {
 <div class="wrapper">
 	@if(label()) {
 		<label class="wrapper__label" for="input">{{label()}}</label>

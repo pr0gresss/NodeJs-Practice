@@ -1,0 +1,25 @@
+<div class="container">
+	<h1 class="container__header">All article versions:</h1>
+	@if(versions().length > 0) {
+	@for(version of versions(); track version) {
+	<div class="card" [routerLink]="version.id">
+		<h2 class="card__title">
+			{{ version.title }} @if(version.isLatest) {<span class="latest-label"
+				>Latest version <app-icon icon="check-double" /></span
+			>}
+		</h2>
+		<div class="card__dates">
+			<div class="card__title">
+				Created at: {{ version.createdAt | date : "medium" }}
+			</div>
+		</div>
+	</div>
+	} }@else {
+		<div class="empty">
+			<div class="empty__text">
+				<h1>Something went wrong...</h1>
+				<p>Can't find versions of this article.</p>
+			</div>
+		</div>
+	}
+</div>

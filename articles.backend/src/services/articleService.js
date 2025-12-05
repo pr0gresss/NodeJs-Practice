@@ -1,9 +1,5 @@
-const {
-	Article,
-	Attachment,
-	ArticleAttachment,
-	sequelize,
-} = require("../db/models/");
+const {Article, Attachment, sequelize, Version} = require("../db/models/");
+const VersionService = require("./versionService");
 const {BASE_URL} = require("../config/environment");
 
 class ArticleService {
@@ -11,9 +7,17 @@ class ArticleService {
 		const articles = await Article.findAll({
 			include: [
 				{
-					model: Attachment,
-					as: "attachments",
-					through: {attributes: []},
+					model: Version,
+					as: "versions",
+					where: {isLatest: true},
+					required: false,
+					include: [
+						{
+							model: Attachment,
+							as: "attachments",
+							through: {attributes: []},
+						},
+					],
 				},
 			],
 		});
@@ -25,9 +29,17 @@ class ArticleService {
 		const article = await Article.findByPk(id, {
 			include: [
 				{
-					model: Attachment,
-					as: "attachments",
-					through: {attributes: []},
+					model: Version,
+					as: "versions",
+					required: false,
+					where: {isLatest: true},
+					include: [
+						{
+							model: Attachment,
+							as: "attachments",
+							through: {attributes: []},
+						},
+					],
 				},
 			],
 		});
@@ -40,14 +52,26 @@ class ArticleService {
 			where: {workspaceId},
 			include: [
 				{
-					model: Attachment,
-					as: "attachments",
-					through: {attributes: []},
+					model: Version,
+					as: "versions",
+					where: {isLatest: true},
+					required: false,
+					include: [
+						{
+							model: Attachment,
+							as: "attachments",
+							through: {attributes: []},
+						},
+					],
 				},
 			],
 		});
 
 		return articles || null;
+	}
+
+	static async getArticleVersionsByArticleId(articleId) {
+		return await Version.findAll({where: articleId});
 	}
 
 	static async create({title, content, attachments = [], workspaceId}) {
@@ -56,64 +80,49 @@ class ArticleService {
 		}
 
 		return await sequelize.transaction(async t => {
-			const article = await Article.create(
-				{title, workspaceId, content},
-				{transaction: t}
-			);
+			const article = await Article.create({workspaceId});
 
-			if (attachments.length) {
-				await ArticleAttachment.bulkCreate(
-					attachments.map(attachment => ({
-						articleId: article.id,
-						attachmentId: attachment.id,
-					})),
-					{transaction: t}
-				);
-			}
+			const version = await VersionService.create({
+				title,
+				content,
+				attachments,
+				articleId: article.id,
+			});
 
-			return article;
+			return await Article.findByPk(article.id, {
+				include: [
+					{
+						model: Version,
+						as: "versions",
+						where: {isLatest: true},
+						required: false,
+						include: [
+							{
+								model: Attachment,
+								as: "attachments",
+								through: {attributes: []},
+							},
+						],
+					},
+				],
+			});
 		});
 	}
 
-	static async update({id, title, content, attachments = []}) {
-		const article = await Article.findByPk(id);
+	static async update({articleId, title, content, attachments = []}) {
+		const article = await Article.findByPk(articleId);
 		if (!article) return null;
 
-		return await sequelize.transaction(async t => {
-			await article.update(
-				{
-					title: title?.trim() ?? article.title,
-					content: content?.trim() ?? article.content,
-				},
-				{transaction: t}
-			);
-
-			if (attachments.length) {
-				await ArticleAttachment.destroy({
-					where: {articleId: id},
-					transaction: t,
-				});
-
-				await ArticleAttachment.bulkCreate(
-					attachments.map(attachment => ({
-						articleId: id,
-						attachmentId: attachment.id,
-					})),
-					{transaction: t}
-				);
-			}
-
-			return article;
+		return await VersionService.create({
+			articleId,
+			title,
+			content,
+			attachments,
 		});
 	}
 
 	static async delete(id) {
 		return sequelize.transaction(async t => {
-			await ArticleAttachment.destroy({
-				where: {articleId: id},
-				transaction: t,
-			});
-
 			const deleted = await Article.destroy({
 				where: {id},
 				transaction: t,

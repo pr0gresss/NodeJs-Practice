@@ -53,9 +53,7 @@ export class CommentsFormComponent implements OnInit {
 	public handlePostComment() {
 		if (!this.commentForm.valid) return;
 
-		console.log("hello");
 		const comment = this.commentForm.value as IComment;
-		console.log(this.articleId, comment);
 		this._commentService.postComment(this.articleId(), comment).subscribe({
 			next: response => {
 				this.commentForm.reset();

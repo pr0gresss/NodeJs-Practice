@@ -2,15 +2,15 @@ const {Comment} = require("../db/models");
 
 class CommentService {
 	static async getAll() {
-		return Comment.findAll();
+		return await Comment.findAll();
 	}
 
 	static async getByArticleId(articleId) {
-		return Comment.findAll({where: {articleId}});
+		return await Comment.findAll({where: {articleId}});
 	}
 
 	static async create({articleId, content}) {
-		return Comment.create({articleId, content});
+		return await Comment.create({articleId, content});
 	}
 
 	static async update({id, content}) {

@@ -53,7 +53,6 @@ export class WorkspaceArticlesPage implements OnInit {
 
 				this._articleService.getArticlesByWorkspaceId(ws).subscribe({
 					next: (articles: IArticle[]) => {
-						console.log(articles);
 						this.articles.set(articles);
 					},
 				});

@@ -6,6 +6,11 @@
 	flex-flow: column nowrap;
 	margin: 0 auto;
 
+	&__title {
+		color: var(--danger-main);
+		font-weight: 500;
+	}
+
 	&__header {
 		position: relative;
 		display: flex;
@@ -20,18 +25,6 @@
 			display: flex;
 			align-items: center;
 			gap: 8px;
-			
-
-		}
-
-    app-input {
-      max-width: 400px;
-    }
-
-		&__actions {
-			display: flex;
-			flex-flow: row wrap;
-			gap: 20px;
 		}
 	}
 
@@ -49,11 +42,15 @@
 
 		&__inner {
 			width: 100%;
-			word-break:break-all;
-		}
-
-		quill-editor {
-			width: 100%;
+			word-break: break-all;
 		}
 	}
+}
+
+.empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 60dvh;
+	text-align: center;
 }
