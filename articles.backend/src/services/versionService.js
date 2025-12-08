@@ -63,7 +63,6 @@ class VersionService {
 				);
 			}
 
-			// Reload version WITH attachments
 			const fullVersion = await Version.findByPk(version.id, {
 				transaction: t,
 				include: [

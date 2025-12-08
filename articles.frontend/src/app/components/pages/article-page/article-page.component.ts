@@ -46,7 +46,6 @@ enum EArticleMode {
     InputComponent,
     WysiwygInputComponent,
     CommentsFormComponent,
-    IconComponent,
 		RouterLink
 ],
 	templateUrl: "./article-page.component.html",
