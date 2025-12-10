@@ -1,4 +1,4 @@
-const VersionService = require("../services/versionService");
+const VersionService = require("../services/version.service");
 
 /**
  * @swagger

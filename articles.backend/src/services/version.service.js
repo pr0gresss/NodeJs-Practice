@@ -1,9 +1,12 @@
+const {where} = require("sequelize");
 const {
 	sequelize,
 	Version,
 	Attachment,
 	VersionAttachment,
+	Article,
 } = require("../db/models");
+const article = require("../db/models/article");
 
 class VersionService {
 	static async getVersionById(versionId) {
@@ -42,6 +45,8 @@ class VersionService {
 				{isLatest: false},
 				{where: {articleId}, transaction: t}
 			);
+
+			await Article.update({createdAt: new Date()}, {where: articleId});
 
 			const version = await Version.create(
 				{

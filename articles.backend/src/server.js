@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({quiet: true});
 const http = require("http");
 const {app} = require("./app");
 const {
@@ -6,7 +6,7 @@ const {
 	SWAGGER_ENDPOINT,
 	FRONTEND_URL,
 } = require("./config/environment");
-const SocketService = require("./services/socketService");
+const SocketService = require("./services/socket.service");
 
 const server = http.createServer(app);
 SocketService.init(server, FRONTEND_URL);

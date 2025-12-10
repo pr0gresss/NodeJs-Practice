@@ -1,4 +1,4 @@
-const WorkspaceService = require("../services/workspaceService");
+const WorkspaceService = require("../services/workspace.service");
 
 /**
  * @swagger

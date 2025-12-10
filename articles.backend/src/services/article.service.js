@@ -1,5 +1,5 @@
-const {Article, Attachment, sequelize, Version} = require("../db/models/");
-const VersionService = require("./versionService");
+const {Article, Attachment, sequelize, Version} = require("../db/models");
+const VersionService = require("./version.service");
 const {BASE_URL} = require("../config/environment");
 
 class ArticleService {
