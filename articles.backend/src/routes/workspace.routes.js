@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const workspaceController = require("../controllers/workspaceController");
+const workspaceController = require("../controllers/workspace.controller");
 
 router.post("/workspaces", workspaceController.create);
 router.put("/workspaces", workspaceController.update);

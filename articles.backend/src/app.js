@@ -1,14 +1,14 @@
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
 const path = require("path");
+const {SWAGGER_ENDPOINT, FRONTEND_URL} = require("./config/environment");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
-const articleRoutes = require("./routes/articleRoutes");
-const workspaceRoutes = require("./routes/workspaceRoutes");
-const commentRoutes = require("./routes/commentRoutes");
-const versionRoutes = require("./routes/versionRoutes");
-const morgan = require("morgan");
-const {SWAGGER_ENDPOINT, FRONTEND_URL} = require("./config/environment");
+const articleRoutes = require("./routes/article.routes");
+const workspaceRoutes = require("./routes/workspace.routes");
+const commentRoutes = require("./routes/comment.routes");
+const versionRoutes = require("./routes/version.routes");
 
 const app = express();
 

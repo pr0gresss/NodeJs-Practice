@@ -1,13 +1,6 @@
-const ArticleService = require("../services/articleService");
-const SocketService = require("../services/socketService");
+const ArticleService = require("../services/article.service");
+const SocketService = require("../services/socket.service");
 const upload = require("../middleware/upload");
-
-/**
- * @swagger
- * tags:
- *   name: Articles
- *   description: Article management
- */
 
 /**
  * @swagger

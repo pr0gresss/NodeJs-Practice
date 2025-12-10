@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const articleController = require("../controllers/articleController");
+const articleController = require("../controllers/article.controller");
 
 router.post("/articles", articleController.create);
 router.put("/articles", articleController.update);
