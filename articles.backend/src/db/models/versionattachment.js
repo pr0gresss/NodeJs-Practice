@@ -1,19 +1,19 @@
 "use strict";
 const {Model} = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-	class ArticleAttachment extends Model {
+	class VersionAttachment extends Model {
 		static associate(models) {}
 	}
-	ArticleAttachment.init(
+	VersionAttachment.init(
 		{
-			articleId: DataTypes.UUID,
+			versionId: DataTypes.UUID,
 			attachmentId: DataTypes.UUID,
 		},
 		{
 			sequelize,
 			timestamps: false,
-			modelName: "ArticleAttachment",
+			modelName: "VersionAttachment",
 		}
 	);
-	return ArticleAttachment;
+	return VersionAttachment;
 };

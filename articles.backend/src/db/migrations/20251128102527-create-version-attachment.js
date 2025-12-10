@@ -2,14 +2,15 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable("ArticleAttachments", {
-			articleId: {
+		await queryInterface.createTable("VersionAttachments", {
+			versionId: {
 				type: Sequelize.UUID,
 				allowNull: false,
 				references: {
-					model: "Articles",
+					model: "Versions",
 					key: "id",
 				},
+				onDelete: "CASCADE"
 			},
 			attachmentId: {
 				type: Sequelize.UUID,
@@ -18,10 +19,11 @@ module.exports = {
 					model: "Attachments",
 					key: "id",
 				},
+				onDelete: "CASCADE"
 			},
 		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable("ArticleAttachments");
+		await queryInterface.dropTable("VersionAttachments");
 	},
 };

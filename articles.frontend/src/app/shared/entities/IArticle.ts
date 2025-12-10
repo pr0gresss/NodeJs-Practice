@@ -1,9 +1,7 @@
-import {IAttachment} from "./IAttachment";
+import { IVersion } from "./IVersion";
 
 export interface IArticle {
-	title: string;
-	content: string;
-	attachments?: IAttachment[];
+	versions: IVersion[]
 	id?: string;
 	createdAt?: Date;
 	updatedAt?: Date;

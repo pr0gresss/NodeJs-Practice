@@ -4,12 +4,12 @@
 	}
 
 	<quill-editor
-		class="wrapper__field"
-		id="quill"
+		#quill
 		[theme]="theme()"
 		(onContentChanged)="onContentChanged($event)"
-		(onBlur)="onBlur()"
-	/>
+		(blur)="onBlur()"
+		[readOnly]="disabled()"
+	></quill-editor>
 
 	@if(control()!.errors! && state() !== "default") {
 	<app-control-errors class="wrapper_errors" [errors]="control()!.errors!" />

@@ -4,6 +4,8 @@ import {CreateArticlePageComponent} from "./components/pages/create-article-page
 import {ArticlePageComponent} from "./components/pages/article-page/article-page.component";
 import {WorkspaceManagePageComponent} from "./components/pages/workspace-manage-page/workspace-manage-page.component";
 import {HomePageComponent} from "./components/pages/home-page/home-page.component";
+import {ArticleVersionsPageComponent} from "./components/pages/article-versions-page/article-versions-page.component";
+import {ArticleVersionPageComponent} from "./components/pages/article-version-page/article-version-page.component";
 
 export const routes: Routes = [
 	{
@@ -24,6 +26,14 @@ export const routes: Routes = [
 			{
 				path: ":articleId",
 				component: ArticlePageComponent,
+			},
+			{
+				path: ":articleId/versions",
+				component: ArticleVersionsPageComponent,
+			},
+			{
+				path: ":articleId/versions/:versionId",
+				component: ArticleVersionPageComponent,
 			},
 		],
 	},
