@@ -27,6 +27,11 @@
 			<app-button icon="edit" (click)="toggleMode()">Edit</app-button>
 		</div>
 	</div>
+	<div class="container__meta">
+		<h3>Author: </h3>
+		<app-user-card [user]="user()!"/>
+		<div class="container__meta__dates"></div>
+	</div>
 	<div class="container__attachments">
 		<app-attachments-block
 			[attachments]="versionForm.controls.attachments.value!"

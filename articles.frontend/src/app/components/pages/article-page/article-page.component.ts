@@ -1,5 +1,6 @@
 import {
 	Component,
+	computed,
 	DestroyRef,
 	inject,
 	input,
@@ -29,7 +30,9 @@ import {InputComponent} from "../../atoms/input/input.component";
 import {WysiwygInputComponent} from "../../atoms/wysiwyg-input/wysiwyg-input.component";
 import {CommentsFormComponent} from "../../organisms/comments-form/comments-form.component";
 import {IVersion} from "../../../shared/entities/IVersion";
-import { IconComponent } from "../../atoms/icon/icon.component";
+import {UserCardComponent} from "../../molecules/user-card/user-card.component";
+import {UserService} from "../../../shared/services/user.service";
+import {IUser} from "../../../shared/entities/IUser";
 
 enum EArticleMode {
 	PREVIEW,
@@ -39,15 +42,16 @@ enum EArticleMode {
 @Component({
 	selector: "app-article-page",
 	imports: [
-    ButtonComponent,
-    ReactiveFormsModule,
-    AttachmentsBlockComponent,
-    UploadButtonComponent,
-    InputComponent,
-    WysiwygInputComponent,
-    CommentsFormComponent,
-		RouterLink
-],
+		ButtonComponent,
+		ReactiveFormsModule,
+		AttachmentsBlockComponent,
+		UploadButtonComponent,
+		InputComponent,
+		WysiwygInputComponent,
+		CommentsFormComponent,
+		RouterLink,
+		UserCardComponent,
+	],
 	templateUrl: "./article-page.component.html",
 	styleUrl: "./article-page.component.scss",
 })
@@ -58,10 +62,12 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	private _sanitizer = inject(DomSanitizer);
 	private _destroyRef = inject(DestroyRef);
 	private _alertService = inject(AlertService);
+	private _userService = inject(UserService);
 
 	protected readonly MODE = EArticleMode;
 	protected versionForm = new FormGroup({
 		articleId: new FormControl<string | null>(null),
+		authorId: new FormControl<string>(""),
 		title: new FormControl<string>("", [
 			Validators.required,
 			Validators.maxLength(40),
@@ -75,6 +81,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	});
 
 	public articleId = input.required<string>();
+	public user = signal<IUser | null>(null);
 	public currentMode = EArticleMode.PREVIEW;
 	public savedVersionForm: IVersion | null = null;
 
@@ -100,6 +107,12 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 			.subscribe({
 				next: data => {
 					this.versionForm.patchValue(data.versions[0]);
+
+					this._userService.getUserById(data.versions[0].authorId!).subscribe({
+						next: data => {
+							this.user.set(data);
+						},
+					});
 				},
 			});
 	}

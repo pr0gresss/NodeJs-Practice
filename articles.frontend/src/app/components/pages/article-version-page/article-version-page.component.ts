@@ -26,7 +26,7 @@ export class ArticleVersionPageComponent implements OnInit {
 				this._alertService.show({
 					type: "error",
 					timeout: 3000,
-					message: err.err.message,
+					message: err.error.message,
 				});
 			},
 		});

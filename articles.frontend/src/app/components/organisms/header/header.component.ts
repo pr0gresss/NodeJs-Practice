@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ButtonComponent } from "../../atoms/button/button.component";
 import { IconComponent } from '../../atoms/icon/icon.component';
+import { AuthService } from '../../../shared/services/auth.service';
 
 
 @Component({
@@ -12,4 +12,9 @@ import { IconComponent } from '../../atoms/icon/icon.component';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
+	public authService = inject(AuthService);
+
+	public signOut() {
+		this.authService.removeAccessToken()
+	}
 }

@@ -35,7 +35,7 @@ class VersionService {
 		});
 	}
 
-	static async create({articleId, content, title, attachments = []}) {
+	static async create({articleId, content, title, attachments = [], authorId}) {
 		if (!content?.trim() || !title?.trim()) {
 			throw new Error("Title and content are required");
 		}
@@ -46,11 +46,10 @@ class VersionService {
 				{where: {articleId}, transaction: t}
 			);
 
-			await Article.update({createdAt: new Date()}, {where: articleId});
-
 			const version = await Version.create(
 				{
 					articleId,
+					authorId,
 					title: title.trim(),
 					content: content.trim(),
 					isLatest: true,

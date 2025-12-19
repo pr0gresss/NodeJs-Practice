@@ -74,18 +74,19 @@ class ArticleService {
 		return await Version.findAll({where: articleId});
 	}
 
-	static async create({title, content, attachments = [], workspaceId}) {
+	static async create({title, content, attachments = [], workspaceId, authorId}) {
 		if (!title?.trim() || !content?.trim()) {
 			throw new Error("Title and content are required");
 		}
 
 		return await sequelize.transaction(async t => {
-			const article = await Article.create({workspaceId});
+			const article = await Article.create({workspaceId, authorId});
 
 			const version = await VersionService.create({
 				title,
 				content,
 				attachments,
+				authorId,
 				articleId: article.id,
 			});
 
@@ -109,12 +110,13 @@ class ArticleService {
 		});
 	}
 
-	static async update({articleId, title, content, attachments = []}) {
+	static async update({articleId, authorId, title, content, attachments = []}) {
 		const article = await Article.findByPk(articleId);
 		if (!article) return null;
 
 		return await VersionService.create({
 			articleId,
+			authorId,
 			title,
 			content,
 			attachments,

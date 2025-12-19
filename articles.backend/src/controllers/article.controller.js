@@ -1,6 +1,7 @@
 const ArticleService = require("../services/article.service");
 const SocketService = require("../services/socket.service");
 const upload = require("../middleware/upload");
+const jwt = require("jsonwebtoken");
 
 /**
  * @swagger
@@ -175,6 +176,7 @@ exports.create = async (req, res) => {
 			title,
 			workspaceId,
 			content,
+			authorId: req.user.id,
 			attachments,
 		});
 
@@ -223,11 +225,18 @@ exports.create = async (req, res) => {
  */
 exports.update = async (req, res) => {
 	try {
-		const {articleId, title, content, attachments = [], authorId} = req.body;
+		const {
+			articleId,
+			title,
+			content,
+			attachments = [],
+			authorSocketId,
+		} = req.body;
 
 		const updated = await ArticleService.update({
 			articleId,
 			title,
+			authorId: req.user.id,
 			content,
 			attachments,
 		});
@@ -238,7 +247,7 @@ exports.update = async (req, res) => {
 			updated.articleId,
 			"articleUpdated",
 			updated,
-			authorId
+			authorSocketId
 		);
 
 		res.status(200).json(updated);

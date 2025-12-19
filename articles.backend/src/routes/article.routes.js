@@ -1,13 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const articleController = require("../controllers/article.controller");
+const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/articles", articleController.create);
-router.put("/articles", articleController.update);
-router.get("/articles", articleController.getAll);
-router.get("/articles/:id", articleController.getById);
-router.delete("/articles/:id", articleController.delete);
-router.get("/articles/workspace/:workspaceId", articleController.getByWorkspaceId);
-router.post("/articles/attachments", articleController.uploadAttachment);
+router.get(
+	"/articles/workspace/:workspaceId",
+	authMiddleware,
+	articleController.getByWorkspaceId
+);
+router.post(
+	"/articles/attachments",
+	authMiddleware,
+	articleController.uploadAttachment
+);
+
+router
+	.route("/articles/:id")
+	.get(authMiddleware, articleController.getById)
+	.delete(authMiddleware, articleController.delete);
+
+router
+	.route("/articles")
+	.post(authMiddleware, articleController.create)
+	.get(authMiddleware, articleController.getAll)
+	.put(authMiddleware, articleController.update);
 
 module.exports = router;
