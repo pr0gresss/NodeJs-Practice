@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AlertService } from '../../../../shared/services/alert.service';
 import { AuthService } from '../../../../shared/services/auth.service';
@@ -18,8 +18,8 @@ export class SignUpPageComponent {
 	private _router = inject(Router);
 
 	public authForm = new FormGroup({
-		email: new FormControl<string>(""),
-		password: new FormControl<string>(""),
+		email: new FormControl<string>("", [Validators.required]),
+		password: new FormControl<string>("", [Validators.required]),
 	});
 
 	public signUp() {

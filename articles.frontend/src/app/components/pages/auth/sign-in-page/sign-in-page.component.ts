@@ -1,5 +1,5 @@
 import {Component, inject} from "@angular/core";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputComponent} from "../../../atoms/input/input.component";
 import { ButtonComponent } from "../../../atoms/button/button.component";
 import { AuthService } from "../../../../shared/services/auth.service";
@@ -19,8 +19,8 @@ export class SignInPageComponent {
 	private _router = inject(Router);
 
 	public authForm = new FormGroup({
-		email: new FormControl<string>(""),
-		password: new FormControl<string>(""),
+		email: new FormControl<string>("", [Validators.required]),
+		password: new FormControl<string>("", [Validators.required]),
 	});
 
 	public signIn() {
