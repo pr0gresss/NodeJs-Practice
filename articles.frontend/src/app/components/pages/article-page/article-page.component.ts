@@ -33,6 +33,7 @@ import {IVersion} from "../../../shared/entities/IVersion";
 import {UserCardComponent} from "../../molecules/user-card/user-card.component";
 import {UserService} from "../../../shared/services/user.service";
 import {IUser} from "../../../shared/entities/IUser";
+import {AuthService} from "../../../shared/services/auth.service";
 
 enum EArticleMode {
 	PREVIEW,
@@ -67,7 +68,6 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	protected readonly MODE = EArticleMode;
 	protected versionForm = new FormGroup({
 		articleId: new FormControl<string | null>(null),
-		authorId: new FormControl<string>(""),
 		title: new FormControl<string>("", [
 			Validators.required,
 			Validators.maxLength(40),
@@ -80,16 +80,15 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 		attachments: new FormControl<IAttachment[]>([]),
 	});
 
+	public authService = inject(AuthService);
 	public articleId = input.required<string>();
-	public user = signal<IUser | null>(null);
+	public author = signal<IUser | null>(null);
 	public currentMode = EArticleMode.PREVIEW;
 	public savedVersionForm: IVersion | null = null;
 
 	public ngOnInit(): void {
 		this.versionForm.controls.articleId.setValue(this.articleId());
-
 		this._socketService.joinRoom(this.articleId());
-
 		this._socketService
 			.listen<IVersion>("articleUpdated")
 			.pipe(takeUntilDestroyed(this._destroyRef))
@@ -107,10 +106,9 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 			.subscribe({
 				next: data => {
 					this.versionForm.patchValue(data.versions[0]);
-
 					this._userService.getUserById(data.versions[0].authorId!).subscribe({
 						next: data => {
-							this.user.set(data);
+							this.author.set(data);
 						},
 					});
 				},
@@ -137,7 +135,6 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	public toggleMode() {
 		if (this.currentMode == EArticleMode.PREVIEW) {
 			this.currentMode = EArticleMode.EDIT;
-
 			this.savedVersionForm = structuredClone(
 				this.versionForm.value as IVersion
 			);
@@ -164,6 +161,11 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 					});
 				},
 				error: err => {
+					this._articleService.getArticleById(this.articleId()).subscribe({
+						next: data => {
+							this.versionForm.patchValue(data.versions[0]);
+						},
+					});
 					this._alertService.show({
 						message: err.error.error,
 						type: "error",

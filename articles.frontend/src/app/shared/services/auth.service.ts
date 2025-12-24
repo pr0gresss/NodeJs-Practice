@@ -1,4 +1,4 @@
-import {inject, Injectable} from "@angular/core";
+import {inject, Injectable, signal} from "@angular/core";
 import {BaseService} from "./base.service";
 import {Observable} from "rxjs";
 import {IUser} from "../entities/IUser";
@@ -8,6 +8,8 @@ import {IUser} from "../entities/IUser";
 })
 export class AuthService {
 	private _baseService = inject(BaseService);
+
+	public me = signal<IUser | null>(null);
 
 	public isAuthenticated() {
 		return Boolean(this.getAccessToken());
@@ -29,7 +31,10 @@ export class AuthService {
 		return this._baseService.get("auth/me");
 	}
 
-	public signOut() {}
+	public signOut() {
+		this.removeAccessToken();
+		this.me.set(null);
+	}
 
 	public singIn(user: IUser): Observable<{user: IUser; token: string}> {
 		return this._baseService.post("auth/sign-in", user);

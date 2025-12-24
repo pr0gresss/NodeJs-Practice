@@ -75,8 +75,10 @@ exports.getByArticleId = async (req, res) => {
 exports.create = async (req, res) => {
 	try {
 		const {articleId, content} = req.body;
+		const authorId = req.user.id;
+		console.log(authorId)
 
-		const comment = await CommentService.create({articleId, content});
+		const comment = await CommentService.create({articleId, authorId, content});
 
 		res.status(201).json(comment);
 	} catch (err) {
@@ -154,8 +156,8 @@ exports.delete = async (req, res) => {
 			return res.status(404).json({error: "Comment not found"});
 		}
 
-		res.status(200).json({message: "Comment deleted"});
+		return res.status(200).json({message: "Comment deleted"});
 	} catch (err) {
-		res.status(400).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };

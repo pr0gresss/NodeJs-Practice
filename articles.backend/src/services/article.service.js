@@ -114,6 +114,8 @@ class ArticleService {
 		const article = await Article.findByPk(articleId);
 		if (!article) return null;
 
+		if(article.authorId !== authorId) throw new Error("You are not allowed to edit article")
+
 		return await VersionService.create({
 			articleId,
 			authorId,

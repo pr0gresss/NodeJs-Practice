@@ -38,8 +38,12 @@ const UserService = require("../services/user.service");
  *                 $ref: "#/components/schemas/User"
  */
 exports.getAll = async (req, res) => {
-	const users = await UserService.getAll();
-	res.status(200).json(users);
+	try {
+		const users = await UserService.getAll();
+		return res.status(200).json(users);
+	} catch (err) {
+		return res.status(400).json({error: err.message});
+	}
 };
 
 /**
@@ -65,7 +69,11 @@ exports.getAll = async (req, res) => {
  *         description: User not found
  */
 exports.getById = async (req, res) => {
-	const user = await UserService.getById(req.params.userId);
-	if (!user) return res.status(404).json({error: "User not found"});
-	res.status(200).json(user);
+	try {
+		const user = await UserService.getById(req.params.userId);
+		if (!user) return res.status(404).json({error: "User not found"});
+		return res.status(200).json(user);
+	} catch (err) {
+		return res.status(400).json({error: err.message});
+	}
 };

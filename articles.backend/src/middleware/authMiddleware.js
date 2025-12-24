@@ -6,20 +6,20 @@ module.exports = async (req, res, next) => {
 		const authHeader = req.headers.authorization;
 
 		if (!authHeader) {
-			return res.status(401).json({message: "Authorization header missing"});
+			return res.status(401).json({error: "Authorization header missing"});
 		}
 
 		const [type, token] = authHeader.split(" ");
 
 		if (type !== "Bearer" || !token) {
-			return res.status(401).json({message: "Invalid authorization format"});
+			return res.status(401).json({error: "Invalid authorization format"});
 		}
 
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
 		const user = await User.findByPk(decoded.id);
 		if (!user) {
-			return res.status(401).json({message: "User not found"});
+			return res.status(401).json({error: "User not found"});
 		}
 
 		req.user = {
@@ -29,6 +29,6 @@ module.exports = async (req, res, next) => {
 
 		next();
 	} catch (err) {
-		return res.status(401).json({message: "Unauthorized"});
+		return res.status(401).json({error: "Unauthorized"});
 	}
 };

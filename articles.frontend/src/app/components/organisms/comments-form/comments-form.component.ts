@@ -62,7 +62,7 @@ export class CommentsFormComponent implements OnInit {
 			error: err => {
 				this._alertService.show({
 					timeout: 3000,
-					message: err.error.message,
+					message: err.error.error,
 					type: "error",
 				});
 			},

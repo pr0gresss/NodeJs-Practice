@@ -15,6 +15,6 @@ export class HeaderComponent {
 	public authService = inject(AuthService);
 
 	public signOut() {
-		this.authService.removeAccessToken()
+		this.authService.signOut();
 	}
 }

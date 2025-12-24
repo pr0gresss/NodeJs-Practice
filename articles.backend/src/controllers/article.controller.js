@@ -69,8 +69,12 @@ const jwt = require("jsonwebtoken");
  *                 $ref: "#/components/schemas/Article"
  */
 exports.getAll = async (req, res) => {
-	const articles = await ArticleService.getAll();
-	res.status(200).json(articles);
+	try {
+		const articles = await ArticleService.getAll();
+		return res.status(200).json(articles);
+	} catch (err) {
+		return res.status(400).json({error: err.message});
+	}
 };
 
 /**
@@ -96,9 +100,17 @@ exports.getAll = async (req, res) => {
  *         description: Article not found
  */
 exports.getById = async (req, res) => {
-	const article = await ArticleService.getById(req.params.id);
-	if (!article) return res.status(404).json({error: "Article not found"});
-	res.status(200).json(article);
+	try {
+		const article = await ArticleService.getById(req.params.id);
+
+		if (!article) {
+			return res.status(404).json({error: "Article not found"});
+		}
+
+		return res.status(200).json(article);
+	} catch (err) {
+		return res.status(400).json({error: err.message});
+	}
 };
 
 /**
@@ -130,8 +142,7 @@ exports.getByWorkspaceId = async (req, res) => {
 
 		return res.status(200).json(articles);
 	} catch (err) {
-		console.error("Failed to fetch workspace articles:", err);
-		return res.status(500).json({error: "Server error"});
+		return res.status(500).json({error: err.message});
 	}
 };
 
@@ -180,9 +191,9 @@ exports.create = async (req, res) => {
 			attachments,
 		});
 
-		res.status(201).json(article);
+		return res.status(201).json(article);
 	} catch (err) {
-		res.status(400).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };
 
@@ -250,9 +261,9 @@ exports.update = async (req, res) => {
 			authorSocketId
 		);
 
-		res.status(200).json(updated);
+		return res.status(200).json(updated);
 	} catch (err) {
-		res.status(400).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };
 
@@ -282,9 +293,9 @@ exports.delete = async (req, res) => {
 
 		if (!deleted) return res.status(404).json({error: "Article not found"});
 
-		res.status(200).json({message: "Article deleted successfully"});
+		return res.status(200).json({message: "Article deleted successfully"});
 	} catch (err) {
-		res.status(500).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };
 
@@ -334,9 +345,7 @@ exports.uploadAttachment = (req, res) => {
 			const attachment = await ArticleService.uploadAttachment(req.file);
 			return res.status(200).json(attachment);
 		} catch (err) {
-			return res.status(400).json({
-				error: err.message,
-			});
+			return res.status(400).json({error: err.message});
 		}
 	});
 };

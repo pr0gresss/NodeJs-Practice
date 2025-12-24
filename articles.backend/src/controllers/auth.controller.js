@@ -54,12 +54,12 @@ exports.signUp = async (req, res) => {
 		const {email, password} = req.body;
 
 		if (!email || !password) {
-			return res.status(400).json({message: "Email and password required"});
+			return res.status(400).json({error: "Email and password required"});
 		}
 
 		const {user, token} = await AuthService.signUp(email, password);
 
-		res.status(201).json({
+		return res.status(201).json({
 			user: {
 				id: user.id,
 				email: user.email,
@@ -67,7 +67,7 @@ exports.signUp = async (req, res) => {
 			token,
 		});
 	} catch (err) {
-		res.status(400).json({message: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };
 
@@ -118,12 +118,12 @@ exports.signIn = async (req, res) => {
 		const {email, password} = req.body;
 
 		if (!email || !password) {
-			return res.status(400).json({message: "Email and password required"});
+			return res.status(400).json({error: "Email and password required"});
 		}
 
 		const {user, token} = await AuthService.signIn(email, password);
 
-		res.json({
+		return res.json({
 			user: {
 				id: user.id,
 				email: user.email,
@@ -131,7 +131,7 @@ exports.signIn = async (req, res) => {
 			token,
 		});
 	} catch (err) {
-		res.status(401).json({error: err.message});
+		return res.status(401).json({error: err.message});
 	}
 };
 
@@ -166,8 +166,8 @@ exports.me = async (req, res) => {
 		const token = authHeader?.split(" ")[1];
 
 		const user = await AuthService.getMe(token);
-		res.json(user);
+		return res.json(user);
 	} catch (err) {
-		res.status(401).json({ error: err.message });
+		return res.status(400).json({error: err.message});
 	}
 };
