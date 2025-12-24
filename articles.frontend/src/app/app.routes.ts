@@ -6,15 +6,20 @@ import {WorkspaceManagePageComponent} from "./components/pages/workspace-manage-
 import {HomePageComponent} from "./components/pages/home-page/home-page.component";
 import {ArticleVersionsPageComponent} from "./components/pages/article-versions-page/article-versions-page.component";
 import {ArticleVersionPageComponent} from "./components/pages/article-version-page/article-version-page.component";
+import {authGuard} from "./shared/guards/auth.guard";
+import {SignInPageComponent} from "./components/pages/auth/sign-in-page/sign-in-page.component";
+import {SignUpPageComponent} from "./components/pages/auth/sign-up-page/sign-up-page.component";
 
 export const routes: Routes = [
+	{path: "", pathMatch: "full", redirectTo: "home"},
 	{
 		path: "",
-		component: HomePageComponent,
+		children: [{path: "home", component: HomePageComponent}],
 	},
 	{
-		path: "create",
-		component: CreateArticlePageComponent,
+		path: "",
+		children: [{path: "create", component: CreateArticlePageComponent}],
+		canActivate: [authGuard],
 	},
 	{
 		path: "articles",
@@ -36,6 +41,7 @@ export const routes: Routes = [
 				component: ArticleVersionPageComponent,
 			},
 		],
+		canActivate: [authGuard],
 	},
 	{
 		path: "workspace",
@@ -44,6 +50,15 @@ export const routes: Routes = [
 				path: "manage",
 				component: WorkspaceManagePageComponent,
 			},
+		],
+		canActivate: [authGuard],
+	},
+	{
+		path: "auth",
+		children: [
+			{path: "", pathMatch: "full", redirectTo: "sign-in"},
+			{path: "sign-in", component: SignInPageComponent},
+			{path: "sign-up", component: SignUpPageComponent},
 		],
 	},
 ];

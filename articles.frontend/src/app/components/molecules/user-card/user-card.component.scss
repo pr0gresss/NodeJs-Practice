@@ -1,0 +1,12 @@
+.card {
+	align-items: center;
+	display: flex;
+	gap: 10px;
+	cursor: pointer;
+
+	app-icon {
+		background-color: var(--colors-gray-300);
+		padding: 6px;
+		border-radius: 50%;
+	}
+}

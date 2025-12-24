@@ -18,6 +18,14 @@ module.exports = {
 				},
 				onDelete: "CASCADE",
 			},
+			authorId: {
+				type: Sequelize.UUID,
+				allowNull: false,
+				references: {
+					model: "Users",
+					key: "id",
+				},
+			},
 			content: {
 				type: Sequelize.STRING,
 			},

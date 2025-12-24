@@ -9,6 +9,8 @@ const articleRoutes = require("./routes/article.routes");
 const workspaceRoutes = require("./routes/workspace.routes");
 const commentRoutes = require("./routes/comment.routes");
 const versionRoutes = require("./routes/version.routes");
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
 
 const app = express();
 
@@ -23,6 +25,6 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/" + SWAGGER_ENDPOINT, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
-app.use("/", [articleRoutes, workspaceRoutes, commentRoutes, versionRoutes]);
-
+app.use("/", [articleRoutes, workspaceRoutes, commentRoutes, versionRoutes, userRoutes]);
+app.use("/auth", [authRoutes]);
 module.exports = {app, FRONTEND_URL, SWAGGER_ENDPOINT};

@@ -9,8 +9,8 @@ class CommentService {
 		return await Comment.findAll({where: {articleId}});
 	}
 
-	static async create({articleId, content}) {
-		return await Comment.create({articleId, content});
+	static async create({articleId, authorId, content}) {
+		return await Comment.create({articleId, authorId, content});
 	}
 
 	static async update({id, content}) {

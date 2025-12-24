@@ -1,21 +1,31 @@
-const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerJSDoc = require("swagger-jsdoc");
 const {BASE_URL} = require("./environment");
 
 const options = {
 	definition: {
-		openapi: '3.0.0',
+		openapi: "3.0.0",
 		info: {
-			title: 'Articles API',
-			version: '1.0.0',
-			description: 'Simple Express API for managing articles',
+			title: "Articles API",
+			version: "1.0.0",
+			description: "Simple Express API for managing articles",
 		},
 		servers: [
 			{
 				url: BASE_URL,
 			},
 		],
+		components: {
+			securitySchemes: {
+				bearerAuth: {
+					type: "http",
+					scheme: "bearer",
+					bearerFormat: "JWT",
+				},
+			},
+		},
+		security: [{bearerAuth: []}],
 	},
-	apis: ['./src/controllers/*.js'],
+	apis: ["./src/controllers/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

@@ -7,6 +7,7 @@ const VersionAttachment = require("./versionattachment")(sequelize, DataTypes);
 const Workspace = require("./workspace")(sequelize, DataTypes);
 const Comment = require("./comment")(sequelize, DataTypes);
 const Version = require("./version")(sequelize, DataTypes);
+const User = require("./user")(sequelize, DataTypes);
 
 const models = {
 	Article,
@@ -15,6 +16,7 @@ const models = {
 	Workspace,
 	Comment,
 	Version,
+	User
 };
 
 Object.values(models).forEach(model => {
