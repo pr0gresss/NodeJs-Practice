@@ -6,8 +6,22 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	VersionAttachment.init(
 		{
-			versionId: DataTypes.UUID,
-			attachmentId: DataTypes.UUID,
+			versionId: {
+				allowNull: false,
+				type: DataTypes.UUID,
+				references: {
+					model: "Versions",
+					key: "id",
+				}
+			},
+			attachmentId: {
+				allowNull: false,
+				type: DataTypes.UUID,
+				references: {
+					model: "Attachments",
+					key: "id",
+				}
+			},
 		},
 		{
 			sequelize,

@@ -2,8 +2,7 @@
 const {Model, Sequelize} = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class Comment extends Model {
-		static associate(models) {
-		}
+		static associate(models) {}
 	}
 	Comment.init(
 		{
@@ -18,6 +17,14 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.UUID,
 				references: {
 					model: "Articles",
+					key: "id",
+				},
+			},
+			authorId: {
+				allowNull: false,
+				type: DataTypes.UUID,
+				references: {
+					model: "Users",
 					key: "id",
 				},
 			},

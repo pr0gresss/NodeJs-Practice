@@ -43,6 +43,8 @@ BASE_PORT=BASE_PORT
 BASE_HOST="http://localhost"
 FRONTEND_HOST="http://localhost"
 FRONTEND_PORT=FRONTEND_PORT
+JWT_SECRET="JWT_SECRET"
+JWT_EXPIRES_IN=1d
 ```
 
 ### ▶️ Run the Backend

@@ -1,3 +1,5 @@
+require("dotenv").config({quiet: true});
+
 const FRONTEND_HOST = process.env.FRONTEND_HOST || "http://localhost";
 const FRONTEND_PORT = process.env.FRONTEND_PORT || 4200;
 const FRONTEND_URL = `${FRONTEND_HOST}:${FRONTEND_PORT}`;

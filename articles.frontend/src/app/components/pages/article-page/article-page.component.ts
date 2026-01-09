@@ -1,5 +1,6 @@
 import {
 	Component,
+	computed,
 	DestroyRef,
 	inject,
 	input,
@@ -29,7 +30,10 @@ import {InputComponent} from "../../atoms/input/input.component";
 import {WysiwygInputComponent} from "../../atoms/wysiwyg-input/wysiwyg-input.component";
 import {CommentsFormComponent} from "../../organisms/comments-form/comments-form.component";
 import {IVersion} from "../../../shared/entities/IVersion";
-import { IconComponent } from "../../atoms/icon/icon.component";
+import {UserCardComponent} from "../../molecules/user-card/user-card.component";
+import {UserService} from "../../../shared/services/user.service";
+import {IUser} from "../../../shared/entities/IUser";
+import {AuthService} from "../../../shared/services/auth.service";
 
 enum EArticleMode {
 	PREVIEW,
@@ -39,15 +43,16 @@ enum EArticleMode {
 @Component({
 	selector: "app-article-page",
 	imports: [
-    ButtonComponent,
-    ReactiveFormsModule,
-    AttachmentsBlockComponent,
-    UploadButtonComponent,
-    InputComponent,
-    WysiwygInputComponent,
-    CommentsFormComponent,
-		RouterLink
-],
+		ButtonComponent,
+		ReactiveFormsModule,
+		AttachmentsBlockComponent,
+		UploadButtonComponent,
+		InputComponent,
+		WysiwygInputComponent,
+		CommentsFormComponent,
+		RouterLink,
+		UserCardComponent,
+	],
 	templateUrl: "./article-page.component.html",
 	styleUrl: "./article-page.component.scss",
 })
@@ -58,6 +63,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	private _sanitizer = inject(DomSanitizer);
 	private _destroyRef = inject(DestroyRef);
 	private _alertService = inject(AlertService);
+	private _userService = inject(UserService);
 
 	protected readonly MODE = EArticleMode;
 	protected versionForm = new FormGroup({
@@ -74,15 +80,15 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 		attachments: new FormControl<IAttachment[]>([]),
 	});
 
+	public authService = inject(AuthService);
 	public articleId = input.required<string>();
+	public author = signal<IUser | null>(null);
 	public currentMode = EArticleMode.PREVIEW;
 	public savedVersionForm: IVersion | null = null;
 
 	public ngOnInit(): void {
 		this.versionForm.controls.articleId.setValue(this.articleId());
-
 		this._socketService.joinRoom(this.articleId());
-
 		this._socketService
 			.listen<IVersion>("articleUpdated")
 			.pipe(takeUntilDestroyed(this._destroyRef))
@@ -100,6 +106,11 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 			.subscribe({
 				next: data => {
 					this.versionForm.patchValue(data.versions[0]);
+					this._userService.getUserById(data.versions[0].authorId!).subscribe({
+						next: data => {
+							this.author.set(data);
+						},
+					});
 				},
 			});
 	}
@@ -124,7 +135,6 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 	public toggleMode() {
 		if (this.currentMode == EArticleMode.PREVIEW) {
 			this.currentMode = EArticleMode.EDIT;
-
 			this.savedVersionForm = structuredClone(
 				this.versionForm.value as IVersion
 			);
@@ -151,6 +161,11 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 					});
 				},
 				error: err => {
+					this._articleService.getArticleById(this.articleId()).subscribe({
+						next: data => {
+							this.versionForm.patchValue(data.versions[0]);
+						},
+					});
 					this._alertService.show({
 						message: err.error.error,
 						type: "error",

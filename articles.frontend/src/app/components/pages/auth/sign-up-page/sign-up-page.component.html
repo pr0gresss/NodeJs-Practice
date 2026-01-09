@@ -1,0 +1,19 @@
+<div class="container">
+	<form [formGroup]="authForm">
+		<h1>Sign up</h1>
+		<app-input
+			type="email"
+			label="Email"
+			placeholder="Enter email"
+			formControlName="email"
+		/>
+		<app-input
+			type="password"
+			label="Password"
+			placeholder="Enter password"
+			formControlName="password"
+		/>
+		<app-button (click)="signUp()">Sign Up</app-button>
+		<p>Already have account? <a routerLink="/auth/sign-in">Sign in</a></p>
+	</form>
+</div>

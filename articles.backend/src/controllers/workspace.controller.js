@@ -11,8 +11,12 @@ const WorkspaceService = require("../services/workspace.service");
  *         description: List of all workspaces
  */
 exports.getAll = async (req, res) => {
-	const workspaces = await WorkspaceService.getAll();
-	res.status(200).json(workspaces);
+	try {
+		const workspaces = await WorkspaceService.getAll();
+		return res.status(200).json(workspaces);
+	} catch (err) {
+		return res.status(400).json({error: err.message});
+	}
 };
 
 /**
@@ -34,13 +38,17 @@ exports.getAll = async (req, res) => {
  *         description: Workspace not found
  */
 exports.getById = async (req, res) => {
-	const workspace = await WorkspaceService.getById(req.params.id);
+	try {
+		const workspace = await WorkspaceService.getById(req.params.id);
 
-	if (!workspace) {
-		return res.status(404).json({error: "Workspace not found"});
+		if (!workspace) {
+			return res.status(404).json({error: "Workspace not found"});
+		}
+
+		return res.status(200).json(workspace);
+	} catch (err) {
+		return req.status(400).json({error: err.message});
 	}
-
-	res.status(200).json(workspace);
 };
 
 /**
@@ -70,11 +78,11 @@ exports.getById = async (req, res) => {
 exports.create = async (req, res) => {
 	try {
 		const {name} = req.body;
-
 		const workspace = await WorkspaceService.create(name);
-		res.status(201).json(workspace);
+
+		return res.status(201).json(workspace);
 	} catch (err) {
-		res.status(400).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };
 
@@ -106,7 +114,6 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
 	try {
 		const {id, name} = req.body;
-
 		const updated = await WorkspaceService.update({
 			id,
 			name,
@@ -114,9 +121,9 @@ exports.update = async (req, res) => {
 
 		if (!updated) return res.status(404).json({error: "Workspace not found"});
 
-		res.status(200).json(updated);
+		return res.status(200).json(updated);
 	} catch (err) {
-		res.status(400).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };
 
@@ -146,8 +153,8 @@ exports.delete = async (req, res) => {
 			return res.status(404).json({error: "Workspace not found"});
 		}
 
-		res.status(200).json({message: "Workspace deleted successfully"});
+		return res.status(200).json({message: "Workspace deleted successfully"});
 	} catch (err) {
-		res.status(500).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };

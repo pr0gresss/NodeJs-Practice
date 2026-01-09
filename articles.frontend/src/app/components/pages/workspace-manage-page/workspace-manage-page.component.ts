@@ -54,6 +54,28 @@ export class WorkspaceManagePageComponent implements OnInit {
 		});
 	}
 
+	public deleteWorkspace(workspaceId: string) {
+		this._workspaceService.deleteWorkspace(workspaceId).subscribe({
+			next: () => {
+				this._alertService.show({
+					type: "success",
+					timeout: 3000,
+					message: "Workspace have been deleted!",
+				});
+			},
+			error: err => {
+				this._alertService.show({
+					type: "error",
+					timeout: 3000,
+					message: err.err.message,
+				});
+			},
+			complete: () => {
+				this.getWorkspaces()
+			}
+		});
+	}
+
 	public handleWorkspaceCreate() {
 		if (!this.workspaceForm.valid) return;
 

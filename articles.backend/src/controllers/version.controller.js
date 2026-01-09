@@ -26,9 +26,9 @@ exports.getVersionById = async (req, res) => {
 			return res.status(404).json({error: "Version not found"});
 		}
 
-		res.status(200).json(version);
+		return res.status(200).json(version);
 	} catch (err) {
-		res.status(500).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };
 
@@ -61,8 +61,8 @@ exports.getVersionsByArticleId = async (req, res) => {
 			return res.status(404).json({error: "No versions found"});
 		}
 
-		res.status(200).json(versions);
+		return res.status(200).json(versions);
 	} catch (err) {
-		res.status(500).json({error: err.message});
+		return res.status(400).json({error: err.message});
 	}
 };

@@ -1,10 +1,17 @@
 <div class="header">
   <div class="header__container">
     <div class="header__container__nav">
-			<a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/"><app-icon icon="world"/> Home</a>
-			<a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/workspace/manage"><app-icon icon="inbox"/> Workspaces</a>
-      <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="articles"><app-icon icon="document"/>Articles</a>
-      <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="create"><app-icon icon="plus"/>Post new article</a>
+			@if (authService.isAuthenticated()) {
+				<a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/home"><app-icon icon="world"/> Home</a>
+				<a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/workspace/manage"><app-icon icon="inbox"/> Workspaces</a>
+				<a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/articles"><app-icon icon="document"/>Articles</a>
+				<a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/create"><app-icon icon="plus"/>Post new article</a>
+				<a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/auth/sign-in" (click)="signOut()"><app-icon icon="arrow-left"/>Sign out</a>
+			} @else {
+				<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/home"><app-icon icon="world"/>Home</a>
+				<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/auth/sign-in"><app-icon icon="arrow-right"/>Sign in</a>
+			}
+
     </div>
   </div>
 </div>
