@@ -7,7 +7,12 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "authorId",
 				as: "versions",
 			});
-			
+
+			this.belongsTo(models.Role, {
+				foreignKey: "roleId",
+				as: "role",
+			});
+
 			this.hasMany(models.Comment, {
 				foreignKey: "authorId",
 				as: "comments",
@@ -24,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			email: DataTypes.STRING,
 			password: DataTypes.STRING,
+			roleId: {
+				type: DataTypes.UUID,
+				allowNull: true,
+			},
 		},
 		{
 			sequelize,

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const articleController = require("../controllers/article.controller");
 const authMiddleware = require("../middleware/authMiddleware");
+const articleAuthorMiddleware = require("../middleware/articleAuthorMiddleware");
 
 router.get(
 	"/articles/workspace/:workspaceId",
@@ -17,12 +18,12 @@ router.post(
 router
 	.route("/articles/:id")
 	.get(authMiddleware, articleController.getById)
-	.delete(authMiddleware, articleController.delete);
+	.delete(authMiddleware, articleAuthorMiddleware, articleController.delete);
 
 router
 	.route("/articles")
 	.post(authMiddleware, articleController.create)
 	.get(authMiddleware, articleController.getAll)
-	.put(authMiddleware, articleController.update);
+	.put(authMiddleware, articleAuthorMiddleware, articleController.update);
 
 module.exports = router;
