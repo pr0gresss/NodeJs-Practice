@@ -27,7 +27,7 @@ export class AuthService {
 		localStorage.removeItem("accessToken");
 	}
 
-	public getMe() {
+	public getMe(): Observable<IUser> {
 		return this._baseService.get("auth/me");
 	}
 

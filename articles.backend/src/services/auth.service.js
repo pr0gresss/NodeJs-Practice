@@ -18,7 +18,7 @@ class AuthService {
 		}
 
 		const user = await User.findByPk(decoded.id, {
-			attributes: ["id", "email"],
+			attributes: ["id", "email", "roleId"],
 		});
 
 		if (!user) {

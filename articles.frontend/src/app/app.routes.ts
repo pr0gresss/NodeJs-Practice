@@ -9,6 +9,8 @@ import {ArticleVersionPageComponent} from "./components/pages/article-version-pa
 import {authGuard} from "./shared/guards/auth.guard";
 import {SignInPageComponent} from "./components/pages/auth/sign-in-page/sign-in-page.component";
 import {SignUpPageComponent} from "./components/pages/auth/sign-up-page/sign-up-page.component";
+import { adminGuard } from "./shared/guards/admin.guard";
+import { AdminUsersPageComponent } from "./components/pages/admin/admin-users-page/admin-users-page.component";
 
 export const routes: Routes = [
 	{path: "", pathMatch: "full", redirectTo: "home"},
@@ -61,4 +63,11 @@ export const routes: Routes = [
 			{path: "sign-up", component: SignUpPageComponent},
 		],
 	},
+	{
+		path: "admin",
+		children: [
+			{path: "users", component: AdminUsersPageComponent}
+		],
+		canActivate: [authGuard, adminGuard]
+	}
 ];
