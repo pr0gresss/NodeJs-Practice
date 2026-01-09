@@ -25,6 +25,7 @@ module.exports = async (req, res, next) => {
 		req.user = {
 			id: user.id,
 			email: user.email,
+			roleId: user.roleId
 		};
 
 		next();

@@ -1,0 +1,22 @@
+.table {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	align-items: center;
+	gap: 5px;
+
+	&__actions {
+		display: flex;
+		justify-content: space-between;
+		gap: 5px;
+
+		app-button {
+			width: 100%;
+		}
+	}
+}
+
+.list-header {
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
+}

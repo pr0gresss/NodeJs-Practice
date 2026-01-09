@@ -1,6 +1,5 @@
 import { Component, forwardRef, input, signal } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { InputComponent } from '../input/input.component';
 
 @Component({
   selector: 'app-select',

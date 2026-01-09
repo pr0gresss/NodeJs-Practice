@@ -10,6 +10,19 @@ class UserService {
 			attributes: {exclude: ["password"]},
 		});
 	}
+
+	static async update({id, email, roleId}) {
+		const user = await User.findByPk(id);
+		if (!user) return null;
+
+		await user.update({
+			email,
+			roleId,
+		});
+
+		const {password, ...safeUser} = user.get({plain: true});
+		return safeUser;
+	}
 }
 
 module.exports = UserService;
