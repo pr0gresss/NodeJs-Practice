@@ -77,3 +77,50 @@ exports.getById = async (req, res) => {
 		return res.status(400).json({error: err.message});
 	}
 };
+
+/**
+ * @swagger
+ * /users:
+ *   put:
+ *     summary: Update user (admin only)
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               roleId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/User"
+ *       404:
+ *         description: User not found
+ */
+exports.update = async (req, res) => {
+	try {
+		const { id, email, roleId } = req.body;
+
+		const updatedUser = await UserService.update({ id, email, roleId });
+		if (!updatedUser) {
+			return res.status(404).json({ error: "User not found" });
+		}
+
+		return res.status(200).json(updatedUser);
+	} catch (err) {
+		return res.status(400).json({ error: err.message });
+	}
+};
+

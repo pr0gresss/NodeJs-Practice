@@ -1,0 +1,45 @@
+<div class="table">
+	<span>Id</span>
+	<span>Email</span>
+	<span>Role</span>
+	<span>Created at</span>
+	<span>Updated at</span>
+	<span>Actions</span>
+
+	@for (user of users(); track user.id) {
+	<ng-container [formGroup]="getForm(user)">
+		<span>{{ user.id }}</span>
+
+		@if (editingUserId() === user.id) {
+		<app-input formControlName="email" />
+		} @else {
+		<span>{{ user.email }}</span>
+		} @if (editingUserId() === user.id) {
+		<app-select
+			formControlName="roleId"
+			[options]="roles()"
+			valueField="id"
+			displayField="name"
+		/>
+		} @else {
+		<span>{{ getRoleName(user.roleId!) }}</span>
+		}
+
+		<span>{{ user.createdAt }}</span>
+		<span>{{ user.updatedAt }}</span>
+
+		@if (editingUserId() === user.id) {
+		<div class="table__actions">
+			<app-button size="small" (click)="save(user)">Save</app-button>
+			<app-button size="small" (click)="cancel()">Cancel</app-button>
+		</div>
+		} @else {
+		<div class="table__actions">
+			<app-button size="small" variant="secondary" (click)="edit(user)"
+				>Edit</app-button
+			>
+		</div>
+		}
+	</ng-container>
+	}
+</div>

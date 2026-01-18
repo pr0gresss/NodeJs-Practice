@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {User} = require("../db/models");
+const {User, Role} = require("../db/models");
 
 const SALT_ROUNDS = 10;
 
@@ -18,7 +18,7 @@ class AuthService {
 		}
 
 		const user = await User.findByPk(decoded.id, {
-			attributes: ["id", "email"],
+			attributes: ["id", "email", "roleId"],
 		});
 
 		if (!user) {
@@ -35,14 +35,16 @@ class AuthService {
 		}
 
 		const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+		const userRole = await Role.findOne({where: {name: "User"}});
 
 		const user = await User.create({
 			email,
 			password: hashedPassword,
+			roleId: userRole.id,
 		});
 
 		const token = jwt.sign(
-			{id: user.id, email: user.email},
+			{id: user.id, email: user.email, roleId: user.roleId},
 			process.env.JWT_SECRET,
 			{
 				expiresIn: process.env.JWT_EXPIRES_IN,
@@ -64,7 +66,7 @@ class AuthService {
 		}
 
 		const token = jwt.sign(
-			{id: user.id, email: user.email},
+			{id: user.id, email: user.email, roleId: user.roleId},
 			process.env.JWT_SECRET,
 			{
 				expiresIn: process.env.JWT_EXPIRES_IN,

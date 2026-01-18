@@ -8,6 +8,7 @@ const Workspace = require("./workspace")(sequelize, DataTypes);
 const Comment = require("./comment")(sequelize, DataTypes);
 const Version = require("./version")(sequelize, DataTypes);
 const User = require("./user")(sequelize, DataTypes);
+const Role = require("./role")(sequelize, DataTypes);
 
 const models = {
 	Article,
@@ -16,7 +17,8 @@ const models = {
 	Workspace,
 	Comment,
 	Version,
-	User
+	User,
+	Role
 };
 
 Object.values(models).forEach(model => {

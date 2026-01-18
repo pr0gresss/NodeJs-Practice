@@ -47,6 +47,12 @@ JWT_SECRET="JWT_SECRET"
 JWT_EXPIRES_IN=1d
 ```
 
+### 🚹 Test admin user
+```bash
+admin@admin.lt
+admin123
+```
+
 ### ▶️ Run the Backend
 ```bash
 npm run start

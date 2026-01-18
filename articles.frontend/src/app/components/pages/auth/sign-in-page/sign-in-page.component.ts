@@ -38,6 +38,7 @@ export class SignInPageComponent {
 			next: response => {
 				this._authService.setAccessToken(response.token);
 				this._authService.me.set(response.user);
+				console.log(this._authService.me())
 				this._router.navigate(["/"]);
 			},
 			error: err => {
