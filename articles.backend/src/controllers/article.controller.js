@@ -1,7 +1,6 @@
 const ArticleService = require("../services/article.service");
 const SocketService = require("../services/socket.service");
 const upload = require("../middleware/upload");
-const jwt = require("jsonwebtoken");
 
 /**
  * @swagger
@@ -348,4 +347,48 @@ exports.uploadAttachment = (req, res) => {
 			return res.status(400).json({error: err.message});
 		}
 	});
+};
+
+/**
+ * @swagger
+ * /articles/search:
+ *   get:
+ *     summary: Search articles by title or content
+ *     tags: [Articles]
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Text to search for in article title or content
+ *     responses:
+ *       200:
+ *         description: Matching articles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: "#/components/schemas/Article"
+ *       400:
+ *         description: Search query is missing
+ *       500:
+ *         description: Search failed
+ */
+exports.search = async (req, res) => {
+	try {
+		const query = (req.query.query || "").trim();
+
+		if (!query) {
+			return res.status(400).json({error: "Search query is required"});
+		}
+
+		const articles = await ArticleService.search(query);
+
+		res.status(200).json(articles);
+	} catch (error) {
+		console.error("Search error:", error.message);
+		res.status(500).json({message: "Search failed"});
+	}
 };

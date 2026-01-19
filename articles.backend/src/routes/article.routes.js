@@ -15,6 +15,8 @@ router.post(
 	articleController.uploadAttachment
 );
 
+router.get("/articles/search", articleController.search)
+
 router
 	.route("/articles/:id")
 	.get(authMiddleware, articleController.getById)

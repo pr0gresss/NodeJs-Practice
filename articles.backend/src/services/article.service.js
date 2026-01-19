@@ -1,4 +1,6 @@
 const {Article, Attachment, sequelize, Version} = require("../db/models");
+const {Op} = require("sequelize");
+
 const VersionService = require("./version.service");
 const {BASE_URL} = require("../config/environment");
 
@@ -74,7 +76,13 @@ class ArticleService {
 		return await Version.findAll({where: articleId});
 	}
 
-	static async create({title, content, attachments = [], workspaceId, authorId}) {
+	static async create({
+		title,
+		content,
+		attachments = [],
+		workspaceId,
+		authorId,
+	}) {
 		if (!title?.trim() || !content?.trim()) {
 			throw new Error("Title and content are required");
 		}
@@ -114,7 +122,8 @@ class ArticleService {
 		const article = await Article.findByPk(articleId);
 		if (!article) return null;
 
-		if(article.authorId !== authorId) throw new Error("You are not allowed to edit article")
+		if (article.authorId !== authorId)
+			throw new Error("You are not allowed to edit article");
 
 		return await VersionService.create({
 			articleId,
@@ -149,6 +158,31 @@ class ArticleService {
 		});
 
 		return attachment;
+	}
+
+	static async search(query) {
+		if (!query) {
+			return []
+		}
+
+		return await Article.findAll({
+			include: [
+				{
+					model: Version,
+					as: "versions",
+					where: {
+						isLatest: true,
+						[Op.or]: [
+							{title: {[Op.iLike]: `%${query}%`}},
+							{content: {[Op.iLike]: `%${query}%`}},
+						],
+					},
+					required: true,
+				},
+			],
+			order: [["createdAt", "DESC"]],
+			limit: 100,
+		});
 	}
 }
 

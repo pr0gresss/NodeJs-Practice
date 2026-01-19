@@ -1,0 +1,28 @@
+.container {
+	max-width: 1200px;
+	padding: 0 20px;
+	margin: 0 auto;
+
+	display: flex;
+	flex-flow: column;
+	gap: 20px;
+
+	&__form {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
+
+	&__results {
+		display: flex;
+		flex-flow: column;
+		gap: 20px;
+	}
+
+	&__empty {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 30vh;
+	}
+}
