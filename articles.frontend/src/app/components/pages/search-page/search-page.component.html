@@ -1,0 +1,28 @@
+<div class="container">
+	<form
+		class="container__form"
+		[formGroup]="searchForm"
+		(submit)="handleSearch()"
+	>
+		<app-input formControlName="query" />
+		<app-button size="small" type="submit">Search</app-button>
+	</form>
+	@if(isFirstSearch()) {
+		<div class="container__empty">
+			<h2>Looking for something? Enter a search query to get started.</h2>
+		</div>
+	}
+
+	@if(!isFirstSearch() && articles().length === 0) {
+		<div class="container__empty">
+			<h2>No results found. Try using different keywords.</h2>
+		</div>
+	}
+	@if (articles().length > 0) {
+		<div class="container__results">
+			@for (article of articles(); track article.id) {
+				<app-article-card [article]="article" />
+			}
+		</div>
+	}
+</div>

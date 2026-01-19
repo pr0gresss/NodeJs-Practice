@@ -51,4 +51,8 @@ export class ArticleService {
 			formData
 		);
 	}
+
+	public search(query: string): Observable<IArticle[]> {
+		return this._baseService.get(`articles/search?query=${query}`)
+	}
 }
