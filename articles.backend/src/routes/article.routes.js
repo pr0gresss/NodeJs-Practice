@@ -4,18 +4,18 @@ const articleController = require("../controllers/article.controller");
 const authMiddleware = require("../middleware/authMiddleware");
 const articleAuthorMiddleware = require("../middleware/articleAuthorMiddleware");
 
-router.get(
-	"/articles/workspace/:workspaceId",
-	authMiddleware,
-	articleController.getByWorkspaceId
-);
-router.post(
-	"/articles/attachments",
-	authMiddleware,
-	articleController.uploadAttachment
-);
+router
+	.route("/articles/workspace/:workspaceId")
+	.get(authMiddleware, articleController.getByWorkspaceId);
+router
+	.route("/articles/attachments")
+	.post(authMiddleware, articleController.uploadAttachment);
 
-router.get("/articles/search", articleController.search)
+router
+	.route("/articles/search")
+	.get(authMiddleware, articleController.search);
+
+router.route("/articles/:id/export/pdf").get(articleController.exportPdf)
 
 router
 	.route("/articles/:id")

@@ -1,5 +1,7 @@
-const {Article, Attachment, sequelize, Version} = require("../db/models");
+const {Article, Attachment, sequelize, Version, User} = require("../db/models");
 const {Op} = require("sequelize");
+const PDFDocument = require("pdfkit");
+const {htmlToText} = require("html-to-text");
 
 const VersionService = require("./version.service");
 const {BASE_URL} = require("../config/environment");
@@ -162,7 +164,7 @@ class ArticleService {
 
 	static async search(query) {
 		if (!query) {
-			return []
+			return [];
 		}
 
 		return await Article.findAll({
@@ -183,6 +185,59 @@ class ArticleService {
 			order: [["createdAt", "DESC"]],
 			limit: 100,
 		});
+	}
+
+	static async getArticlePdf(id) {
+		const article = await Article.findByPk(id, {
+			include: [
+				{
+					model: Version,
+					as: "versions",
+					required: false,
+					where: {isLatest: true},
+					include: [
+						{
+							model: User,
+							as: "author",
+							attributes: {
+								exclude: ["password"],
+							},
+						},
+					],
+				},
+			],
+		});
+
+		if (!article) {
+			throw new Error("Article not found.");
+		}
+
+		const document = new PDFDocument({margin: 50, size: "A4"});
+
+		const plainContent = htmlToText(article.versions[0].content);
+
+		document
+			.fontSize(22)
+			.text(article.versions[0].title, {align: "center"})
+			.moveDown(0.5);
+		document
+			.fontSize(10)
+			.fillColor("gray")
+			.text(`Author: ${article.versions[0].author.email}`)
+			.text(`Created: ${article.createdAt.toDateString()}`)
+			.moveDown();
+		document
+			.moveTo(document.page.margins.left, document.y)
+			.lineTo(document.page.width - document.page.margins.right, document.y)
+			.strokeColor("#aaaaaa")
+			.stroke()
+			.moveDown();
+		document.fillColor("black").fontSize(12).text(plainContent, {
+			align: "left",
+			lineGap: 4,
+		});
+
+		return document;
 	}
 }
 

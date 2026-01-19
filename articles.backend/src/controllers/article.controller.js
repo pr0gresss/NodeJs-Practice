@@ -388,7 +388,57 @@ exports.search = async (req, res) => {
 
 		res.status(200).json(articles);
 	} catch (error) {
-		console.error("Search error:", error.message);
-		res.status(500).json({message: "Search failed"});
+		res.status(500).json({error: error.message});
+	}
+};
+
+/**
+ * @swagger
+ * /articles/{id}/export/pdf:
+ *   get:
+ *     summary: Export article as PDF
+ *     description: Generates a PDF file containing the article title, content, and metadata.
+ *     tags:
+ *       - Articles
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the article to export
+ *     responses:
+ *       200:
+ *         description: PDF file generated successfully
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Invalid request or article not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
+exports.exportPdf = async (req, res) => {
+	try {
+		const articleId = req.params.id;
+		const document = await ArticleService.getArticlePdf(articleId);
+
+		res.setHeader("Content-Type", "application/pdf");
+		res.setHeader(
+			"Content-Disposition",
+			`attachment; filename=article-${articleId}.pdf`,
+		);
+
+		document.pipe(res);
+		document.end();
+	} catch (error) {
+		res.status(400).json({error: error.message});
 	}
 };

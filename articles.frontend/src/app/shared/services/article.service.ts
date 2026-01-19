@@ -55,4 +55,8 @@ export class ArticleService {
 	public search(query: string): Observable<IArticle[]> {
 		return this._baseService.get(`articles/search?query=${query}`)
 	}
+
+	public getPdf(articleId: string): Observable<Blob> {
+		return this._baseService.getBlob(`articles/${articleId}/export/pdf`)
+	}
 }

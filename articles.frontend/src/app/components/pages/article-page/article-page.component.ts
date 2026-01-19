@@ -228,4 +228,22 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 			},
 		});
 	}
+
+	public downloadPdf() {
+		this._articleService.getPdf(this.articleId()).subscribe({
+			next: (blob: any) => {
+				const url = window.URL.createObjectURL(blob);
+				const a = document.createElement("a");
+
+				a.href = url;
+				a.download = `article-${this.articleId()}.pdf`;
+				a.click();
+
+				window.URL.revokeObjectURL(url);
+			},
+			error: (err) => {
+				this._alertService.show({type: "error", timeout: 3000, message: err.error.message})
+			}
+		});
+	}
 }
