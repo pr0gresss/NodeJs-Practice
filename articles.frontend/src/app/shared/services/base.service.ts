@@ -14,6 +14,12 @@ export class BaseService {
     return this._httpClient.get<ResponseType>(this.baseUrl + path);
   }
 
+	getBlob(path: string): Observable<Blob> {
+    return this._httpClient.get(this.baseUrl + path, {
+      responseType: 'blob',
+    });
+  }
+
   post<ResponseType>(path: string, data: object): Observable<ResponseType> {
     return this._httpClient.post<ResponseType>(this.baseUrl + path, data);
   }

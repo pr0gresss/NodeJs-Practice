@@ -5,7 +5,7 @@ import {RouterLink} from "@angular/router";
 
 @Component({
 	selector: "app-user-card",
-	imports: [IconComponent, RouterLink],
+	imports: [IconComponent],
 	templateUrl: "./user-card.component.html",
 	styleUrl: "./user-card.component.scss",
 })
